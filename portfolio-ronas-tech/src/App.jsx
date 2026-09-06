@@ -1,220 +1,387 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import portraitUrl from '../assets/ronael-moura.webp'
 
-const links = [
-  ['Ronas Desk', 'ronas-desk'], ['Sobre', 'sobre'], ['Stack', 'stack'],
-  ['Processo', 'processo'], ['Jornada', 'jornada'], ['Contato', 'contato'],
+const projects = [
+  {
+    number: '02',
+    title: 'Beatriz Mendes · Dados',
+    category: 'client',
+    type: 'Projeto publicado · Portfólio',
+    description: 'Portfólio profissional sob medida para posicionar uma analista de dados aplicada à saúde com narrativa editorial, clareza e confiança.',
+    tags: ['React', 'UX/UI', 'Acessibilidade', 'SEO', 'Vercel'],
+    link: 'https://beatriz-mendes-portfolio.vercel.app/',
+    cta: 'Visitar site',
+    accent: 'sage',
+    visual: 'healthdata',
+  },
+  {
+    number: '03',
+    title: 'StockFlow API',
+    category: 'backend',
+    type: 'Backend · API',
+    description: 'API de estoque e pedidos com autenticação, regras de negócio e documentação pensada para integração real.',
+    tags: ['TypeScript', 'Express', 'MySQL', 'JWT', 'OpenAPI', 'Docker'],
+    link: 'https://github.com/ronaelmoura/stockflow-api',
+    accent: 'violet',
+    visual: 'api',
+  },
+  {
+    number: '04',
+    title: 'Multer Safe Limit',
+    category: 'opensource',
+    type: 'Open source · Package',
+    description: 'Wrapper em TypeScript que resolve um edge case real do Multer ao receber arquivos exatamente no limite configurado.',
+    tags: ['TypeScript', 'Node.js', 'Multer', 'Middleware', 'Bugfix'],
+    link: 'https://github.com/ronaelmoura/multer-safe-limit',
+    accent: 'orange',
+    visual: 'package',
+  },
+  {
+    number: '05',
+    title: 'Nexo Financeiro',
+    category: 'frontend',
+    type: 'Frontend · Data visualization',
+    description: 'Dashboard financeiro responsivo com visualização de dados, hierarquia clara e interações orientadas à decisão.',
+    tags: ['React', 'TypeScript', 'Recharts', 'Responsive UI'],
+    link: 'https://ronaelmoura.github.io/nexo-dashboard-financeiro/',
+    source: 'https://github.com/ronaelmoura/nexo-dashboard-financeiro',
+    accent: 'blue',
+    visual: 'finance',
+  },
 ]
 
-const features = [
-  { icon: '01', title: 'Gestão de clientes', text: 'Cadastro, edição, pesquisa e controle de situação ativa ou inativa.' },
-  { icon: '02', title: 'Gestão de chamados', text: 'Categorias, prioridades e status para acompanhar cada atendimento.' },
-  { icon: '03', title: 'Histórico conectado', text: 'Clientes vinculados aos chamados, com contexto completo do suporte.' },
-  { icon: '04', title: 'Dashboard operacional', text: 'Indicadores de chamados abertos, em andamento e concluídos.' },
-  { icon: '05', title: 'API REST', text: 'Camada de serviços em Node.js e Express para uma integração consistente.' },
-  { icon: '06', title: 'Dados persistentes', text: 'Modelagem em MySQL pensada para integridade e evolução do produto.' },
+const expertise = [
+  { number: '01', title: 'Product engineering', text: 'Transformo requisitos em fluxos claros, separo responsabilidades e tomo decisões técnicas pensando no produto depois do primeiro deploy.', meta: 'Discovery · UX · Arquitetura' },
+  { number: '02', title: 'Full stack systems', text: 'Interfaces em React, APIs em Node.js, autenticação, persistência, uploads, relatórios e integrações trabalhando como um único sistema.', meta: 'React · Node · TypeScript · SQL' },
+  { number: '03', title: 'Quality by design', text: 'Testes, estados de erro, acessibilidade, segurança e documentação entram na engenharia desde o início — não como acabamento tardio.', meta: 'CI · Tests · Security · DX' },
 ]
 
-const roadmap = [
-  { version: 'v0.8', state: 'Agora', title: 'Base operacional', text: 'CRUD de clientes e chamados, vínculos, filtros e histórico por cliente.', active: true },
-  { version: 'v0.9', state: 'Próximo', title: 'Controle e produtividade', text: 'Autenticação JWT, gestão de técnicos, anexos e dashboard avançado.' },
-  { version: 'v1.0', state: 'Lançamento', title: 'Produto completo', text: 'Relatórios, refinamento de testes, experiência final e deploy.' },
+const journey = [
+  ['Fundação', 'Suporte em TI', 'Aprendi a investigar problemas pela perspectiva de quem usa: ouvir, reproduzir, diagnosticar e resolver.'],
+  ['Formação', 'Full Stack · SENAI', '670 horas de formação prática em front-end, back-end, APIs, dados, testes e versionamento.'],
+  ['Trabalho atual', 'Ronas Tech', 'Operação própria de suporte remoto: experiência digital, diagnóstico técnico e atendimento direto para clientes em todo o Brasil.'],
+  ['Agora', 'Produtos completos', 'Ronas Desk v1.0 em produção e uma base crescente de projetos com TypeScript, automação e engenharia de qualidade.'],
 ]
 
-const techGroups = [
-  { eyebrow: 'Interface', icon: '◫', title: 'Front-End', text: 'Experiências rápidas, acessíveis e responsivas.', items: ['React', 'Vite', 'JavaScript', 'HTML5', 'CSS3'] },
-  { eyebrow: 'Serviços', icon: '⌁', title: 'Back-End', text: 'APIs organizadas e regras de negócio bem definidas.', items: ['Node.js', 'Express', 'REST API', 'JSON', 'npm'] },
-  { eyebrow: 'Persistência', icon: '◉', title: 'Dados & Qualidade', text: 'Dados consistentes, validação e confiança na entrega.', items: ['MySQL', 'SQL', 'Postman', 'Testes', 'Documentação'] },
-  { eyebrow: 'Entrega', icon: '⌘', title: 'Workflow', text: 'Da ideia ao software publicado e versionado.', items: ['Git', 'GitHub', 'VS Code', 'Figma', 'Deploy'] },
-]
-
-const process = [
-  ['01', 'Planejamento', 'Entendo o problema, o usuário e o resultado esperado.'],
-  ['02', 'Arquitetura', 'Defino dados, componentes, integrações e responsabilidades.'],
-  ['03', 'Desenvolvimento', 'Construo em ciclos pequenos, claros e rastreáveis.'],
-  ['04', 'Testes', 'Valido fluxos, erros, responsividade e casos importantes.'],
-  ['05', 'Code Review', 'Reviso legibilidade, consistência e oportunidades de simplificar.'],
-  ['06', 'Git', 'Registro a evolução com commits objetivos e histórico organizado.'],
-  ['07', 'Deploy', 'Publico, verifico o ambiente real e acompanho a entrega.'],
-  ['08', 'Melhoria contínua', 'Coleto aprendizados e evoluo produto, código e processo.'],
-]
-
-function Arrow() { return <span aria-hidden="true">↗</span> }
-
-function Header() {
-  const [open, setOpen] = useState(false)
-  const [scrolled, setScrolled] = useState(false)
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20)
-    onScroll(); window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
-  return <header className={`header ${scrolled ? 'scrolled' : ''}`}>
-    <div className="nav-wrap">
-      <a className="brand" href="#inicio" aria-label="Ronas Tech — início">
-        <img src="assets/favicon.png" alt="" /><span><strong>RONAS</strong> TECH</span>
-      </a>
-      <nav className="nav-desktop" aria-label="Navegação principal">
-        {links.map(([label, id]) => <a key={id} href={`#${id}`}>{label}</a>)}
-      </nav>
-      <a className="nav-cta" href="#contato">Vamos conversar <Arrow /></a>
-      <button className="menu-button" onClick={() => setOpen(!open)} aria-expanded={open} aria-label={open ? 'Fechar menu' : 'Abrir menu'}>
-        <span /><span /><span />
-      </button>
-    </div>
-    <nav className={`nav-mobile ${open ? 'open' : ''}`} aria-label="Navegação móvel">
-      {links.map(([label, id]) => <a key={id} onClick={() => setOpen(false)} href={`#${id}`}>{label}</a>)}
-    </nav>
-  </header>
+const consoleTabs = {
+  produto: {
+    label: 'Produto',
+    title: 'Operação de suporte em um fluxo único.',
+    text: 'Clientes, chamados, comentários, histórico, anexos, indicadores de SLA e relatórios conectados em uma aplicação segura.',
+    stats: [['15', 'chamados demo'], ['06', 'clientes demo'], ['read-only', 'conta pública']],
+  },
+  arquitetura: {
+    label: 'Arquitetura',
+    title: 'Camadas claras. Evolução previsível.',
+    text: 'React consome uma API REST em Express, que organiza rotas, middlewares, controllers, models, MySQL e Cloudinary.',
+    stats: [['React 19', 'interface'], ['Express 5', 'API REST'], ['MySQL 8', 'persistência']],
+  },
+  qualidade: {
+    label: 'Qualidade',
+    title: 'Confiança para mudar sem medo.',
+    text: 'O pipeline valida backend e frontend. Testes unitários, de interface e de integração protegem regras críticas e fluxos autenticados.',
+    stats: [['307', 'backend'], ['54', 'frontend'], ['09', 'integração']],
+  },
 }
 
-function SectionHead({ tag, title, text }) {
-  return <div className="section-head reveal">
-    <p className="eyebrow"><span />{tag}</p><h2>{title}</h2>{text && <p className="section-lead">{text}</p>}
-  </div>
+const socialLinks = [
+  ['GH', 'GitHub', 'https://github.com/ronaelmoura'],
+  ['IN', 'LinkedIn', 'https://www.linkedin.com/in/ronael-moura'],
+  ['YT', 'YouTube', 'https://www.youtube.com/@RonasTech'],
+]
+
+function Arrow() {
+  return <span className="arrow" aria-hidden="true">↗</span>
+}
+
+function SectionIntro({ eyebrow, title, text, dark = false }) {
+  return (
+    <div className={`section-intro ${dark ? 'is-dark' : ''}`} data-reveal>
+      <p className="eyebrow"><span />{eyebrow}</p>
+      <div><h2>{title}</h2>{text && <p>{text}</p>}</div>
+    </div>
+  )
+}
+
+function Header({ onCommand }) {
+  const [menuOpen, setMenuOpen] = useState(false)
+  const [localTime, setLocalTime] = useState('')
+
+  useEffect(() => {
+    const format = () => setLocalTime(new Intl.DateTimeFormat('pt-BR', { hour: '2-digit', minute: '2-digit', timeZone: 'America/Fortaleza' }).format(new Date()))
+    format()
+    const interval = window.setInterval(format, 30000)
+    return () => window.clearInterval(interval)
+  }, [])
+
+  const close = () => setMenuOpen(false)
+
+  return (
+    <header className="site-header">
+      <a className="brand" href="#inicio" aria-label="Ronael Moura — início" onClick={close}>
+        <span className="brand-mark">RM</span>
+        <span className="brand-copy"><strong>Ronael Moura</strong><small>Full Stack Engineer</small></span>
+      </a>
+      <nav className={menuOpen ? 'main-nav is-open' : 'main-nav'} aria-label="Navegação principal">
+        <a href="#trabalho-atual" onClick={close}>Ronas Tech</a>
+        <a href="#projetos" onClick={close}>Projetos</a>
+        <a href="#especialidades" onClick={close}>Especialidades</a>
+        <a href="#sobre" onClick={close}>Sobre</a>
+        <a href="#contato" onClick={close}>Contato</a>
+      </nav>
+      <div className="header-tools">
+        <span className="local-time">CE {localTime}</span>
+        <button className="command-trigger" onClick={onCommand} aria-label="Abrir atalhos"><span>Ir para</span><kbd>⌘ K</kbd></button>
+        <a className="header-cta" href="mailto:ronaelmoura240@gmail.com">Vamos conversar <Arrow /></a>
+      </div>
+      <button className="menu-toggle" onClick={() => setMenuOpen((value) => !value)} aria-expanded={menuOpen} aria-label="Alternar menu"><span /><span /></button>
+    </header>
+  )
+}
+
+function CommandMenu({ open, onClose }) {
+  if (!open) return null
+
+  const items = [
+    ['01', 'Trabalho atual', '#trabalho-atual'],
+    ['02', 'Projeto principal', '#ronas-desk'],
+    ['03', 'Todos os projetos', '#projetos'],
+    ['04', 'Sobre mim', '#sobre'],
+    ['05', 'Contato', '#contato'],
+  ]
+
+  const go = (href) => {
+    document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' })
+    onClose()
+  }
+
+  return (
+    <div className="command-backdrop" role="presentation" onMouseDown={onClose}>
+      <div className="command-menu" role="dialog" aria-modal="true" aria-label="Atalhos de navegação" onMouseDown={(event) => event.stopPropagation()}>
+        <div className="command-head"><span>NAVEGAÇÃO RÁPIDA</span><button onClick={onClose}>ESC</button></div>
+        <div className="command-list">{items.map(([number, label, href]) => <button key={href} onClick={() => go(href)}><span>{number}</span>{label}<Arrow /></button>)}</div>
+        <div className="command-foot">Use o mouse ou pressione ESC para fechar.</div>
+      </div>
+    </div>
+  )
+}
+
+function ProductConsole() {
+  return (
+    <div className="product-console" aria-label="Resumo técnico do Ronas Desk">
+      <div className="console-topline"><span className="console-dots"><i /><i /><i /></span><span>production / overview</span><b><i /> live</b></div>
+      <div className="console-body">
+        <div className="console-heading"><div><small>RONAS DESK</small><strong>Service operations</strong></div><span>v1.0.0</span></div>
+        <div className="console-kpis">
+          <article><small>testes</small><strong>370</strong><span>100% passing</span></article>
+          <article><small>stack</small><strong>Full</strong><span>React + Node</span></article>
+          <article><small>status</small><strong>Live</strong><span>demo pública</span></article>
+        </div>
+        <div className="console-grid">
+          <div className="console-chart"><div><small>quality signal</small><span>últimos 7 ciclos</span></div><div className="chart-bars">{[46, 58, 52, 72, 66, 82, 96].map((height, index) => <i key={height} style={{ '--height': `${height}%`, '--delay': `${index * 70}ms` }} />)}</div></div>
+          <div className="console-log"><small>pipeline</small><p><i /> backend tests <b>307</b></p><p><i /> frontend tests <b>54</b></p><p><i /> integration <b>9</b></p></div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function DeskDashboard() {
+  return (
+    <div className="desk-dashboard" aria-hidden="true">
+      <aside><div className="desk-logo">R<span>D</span></div>{['▦', '◎', '◇', '▤', '⚙'].map((item, index) => <i className={index === 0 ? 'active' : ''} key={item}>{item}</i>)}</aside>
+      <div className="desk-content">
+        <div className="desk-toolbar"><div><small>VISÃO GERAL</small><strong>Central de suporte</strong></div><button>+ Novo chamado</button></div>
+        <div className="desk-metrics"><article><span>Em aberto</span><strong>12</strong><small>agora</small></article><article><span>Em andamento</span><strong>08</strong><small>ativos</small></article><article><span>SLA atendido</span><strong>94%</strong><small>+6.2%</small></article></div>
+        <div className="desk-lower">
+          <div className="desk-chart"><span>Chamados resolvidos</span><div>{[28, 45, 35, 66, 54, 81, 72, 92].map((height, index) => <i key={`${height}-${index}`} style={{ height: `${height}%` }} />)}</div></div>
+          <div className="desk-tickets"><span>Atividade recente</span>{[['Crítico', 'Falha no acesso'], ['Médio', 'Configurar estação'], ['Baixo', 'Atualização concluída']].map(([level, title], index) => <p key={title}><i className={`ticket-${index}`} /><b>{title}</b><small>{level}</small></p>)}</div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function SupportConsole() {
+  return (
+    <div className="support-console" aria-label="Fluxo de diagnóstico remoto da Ronas Tech">
+      <div className="support-console-head"><span>diagnostico.ronastech</span><b><i /> sessão segura</b></div>
+      <div className="support-console-body">
+        <small>DIAGNÓSTICO REMOTO</small>
+        <h3>Entender antes<br />de corrigir.</h3>
+        <div className="support-checks">{['Sistema Windows', 'Inicialização', 'Armazenamento', 'Segurança básica'].map((item, index) => <p key={item}><span>✓</span>{item}<i style={{ '--check-delay': `${index * 120}ms` }} /></p>)}</div>
+        <div className="support-terminal"><span>›</span> acesso iniciado com sua autorização<br /><span>›</span> nenhum valor cobrado antes da avaliação</div>
+      </div>
+    </div>
+  )
+}
+
+function ProjectVisual({ type }) {
+  if (type === 'api') return <div className="project-visual api-visual"><div className="api-route"><b>POST</b><span>/api/orders</span><i>201</i></div><pre>{`{\n  "status": "created",\n  "inventory": "reserved",\n  "audit": true\n}`}</pre><div className="api-foot"><span>JWT verified</span><span>18ms</span></div></div>
+  if (type === 'package') return <div className="project-visual package-visual"><span className="package-name">@ronas/multer-safe-limit</span><div><small>exact limit</small><strong>10.0 MB</strong></div><p><i /> upload accepted</p><code>limit !== rejection</code></div>
+  if (type === 'healthdata') return <div className="project-visual health-visual"><div className="health-wordmark"><i /> Beatriz</div><div className="health-title"><small>DADOS APLICADOS À SAÚDE</small><strong>Informação confiável<br />para cuidar melhor.</strong></div><div className="health-tags"><span>Saúde</span><span>BI</span><span>SQL</span><span>Python</span></div><div className="health-orbit"><i /><i /></div></div>
+  return <div className="project-visual finance-visual"><div className="finance-head"><span>Patrimônio</span><b>R$ 24.680</b></div><div className="finance-chart">{[22, 32, 27, 44, 39, 58, 53, 67, 76, 83].map((height, index) => <i key={index} style={{ height: `${height}%` }} />)}</div><div className="finance-row"><span><i />Receitas</span><b>+18,4%</b></div></div>
+}
+
+function ProjectCard({ project }) {
+  return (
+    <article className={`project-card accent-${project.accent}`} data-reveal>
+      <div className="project-card-head"><span>{project.number}</span><small>{project.type}</small></div>
+      <ProjectVisual type={project.visual} />
+      <div className="project-card-body"><h3>{project.title}</h3><p>{project.description}</p><div className="tag-list">{project.tags.map((tag) => <span key={tag}>{tag}</span>)}</div></div>
+      <div className="project-links"><a href={project.link} target="_blank" rel="noreferrer">{project.cta || (project.source ? 'Abrir projeto' : 'Ver repositório')} <Arrow /></a>{project.source && <a href={project.source} target="_blank" rel="noreferrer">Código <Arrow /></a>}</div>
+    </article>
+  )
 }
 
 function App() {
+  const [progress, setProgress] = useState(0)
+  const [activeFilter, setActiveFilter] = useState('all')
+  const [activeConsoleTab, setActiveConsoleTab] = useState('produto')
+  const [commandOpen, setCommandOpen] = useState(false)
+  const [copied, setCopied] = useState(false)
+
+  const visibleProjects = useMemo(() => activeFilter === 'all' ? projects : projects.filter((project) => project.category === activeFilter), [activeFilter])
+  const consoleContent = consoleTabs[activeConsoleTab]
+
   useEffect(() => {
-    const targets = document.querySelectorAll('.reveal')
-    const observer = new IntersectionObserver(entries => entries.forEach(entry => {
-      if (entry.isIntersecting) { entry.target.classList.add('visible'); observer.unobserve(entry.target) }
-    }), { threshold: .1 })
-    targets.forEach(target => observer.observe(target))
-    return () => observer.disconnect()
+    const update = () => {
+      const total = document.documentElement.scrollHeight - window.innerHeight
+      setProgress(total > 0 ? (window.scrollY / total) * 100 : 0)
+    }
+    const pointer = (event) => {
+      document.documentElement.style.setProperty('--pointer-x', `${event.clientX}px`)
+      document.documentElement.style.setProperty('--pointer-y', `${event.clientY}px`)
+    }
+    const keyboard = (event) => {
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') { event.preventDefault(); setCommandOpen((value) => !value) }
+      if (event.key === 'Escape') setCommandOpen(false)
+    }
+    update()
+    window.addEventListener('scroll', update, { passive: true })
+    window.addEventListener('pointermove', pointer, { passive: true })
+    window.addEventListener('keydown', keyboard)
+    return () => {
+      window.removeEventListener('scroll', update)
+      window.removeEventListener('pointermove', pointer)
+      window.removeEventListener('keydown', keyboard)
+    }
   }, [])
 
-  return <>
-    <a className="skip-link" href="#conteudo">Pular para o conteúdo</a>
-    <div className="ambient" aria-hidden="true" />
-    <Header />
-    <main id="conteudo">
-      <section className="hero" id="inicio">
-        <div className="hero-grid">
-          <div className="hero-copy reveal visible">
-            <div className="status-pill"><i /> Disponível para oportunidades</div>
-            <p className="eyebrow"><span /> DESENVOLVEDOR FULL STACK</p>
-            <h1>Eu transformo <em>problemas reais</em> em software que funciona.</h1>
-            <p className="hero-lead">Sou <strong>Ronael Moura</strong>. Construo aplicações completas com React, Node.js e uma visão prática de produto — da arquitetura ao deploy.</p>
-            <div className="actions">
-              <a className="button primary" href="#ronas-desk">Conhecer o Ronas Desk <Arrow /></a>
-              <a className="button secondary" href="https://github.com/ronaelmoura" target="_blank" rel="noreferrer">Ver GitHub <Arrow /></a>
-            </div>
-            <div className="proof">
-              <div><strong>670h</strong><span>Formação Full Stack</span></div>
-              <div><strong>React + Node</strong><span>Produto ponta a ponta</span></div>
-              <div><strong>Em evolução</strong><span>Aprendizado público</span></div>
-            </div>
-          </div>
-          <div className="hero-art reveal visible">
-            <div className="portrait-frame">
-              <span className="frame-label">RONAEL_MOURA / 2026</span>
-              <img src="assets/ronael-moura.webp" alt="Ronael Moura, Desenvolvedor Full Stack" width="1100" height="1100" />
-              <div className="code-card"><i /> <span>BUILDING NOW</span><strong>Ronas Desk v0.8</strong></div>
-              <div className="stack-float"><span>REACT</span><b>+</b><span>NODE.JS</span></div>
-            </div>
-          </div>
-        </div>
-        <a className="scroll-cue" href="#ronas-desk"><span /> Explore o projeto principal</a>
-      </section>
+  useEffect(() => {
+    const targets = document.querySelectorAll('[data-reveal]:not(.is-visible)')
+    const observer = new IntersectionObserver((entries) => entries.forEach((entry) => {
+      if (entry.isIntersecting) { entry.target.classList.add('is-visible'); observer.unobserve(entry.target) }
+    }), { threshold: 0.12, rootMargin: '0px 0px -40px' })
+    targets.forEach((target) => observer.observe(target))
+    return () => observer.disconnect()
+  }, [activeFilter])
 
-      <section className="project-hero" id="ronas-desk">
-        <div className="container">
-          <div className="project-heading reveal">
-            <div><p className="eyebrow"><span /> PROJETO PRINCIPAL · EM DESENVOLVIMENTO</p><h2>Ronas <em>Desk</em></h2></div>
-            <p>Um sistema Full Stack de gerenciamento de chamados técnicos, criado para transformar rotinas de suporte em um fluxo simples, rastreável e eficiente.</p>
+  const copyEmail = async () => {
+    try {
+      await navigator.clipboard.writeText('ronaelmoura240@gmail.com')
+      setCopied(true)
+      window.setTimeout(() => setCopied(false), 1800)
+    } catch {
+      window.location.href = 'mailto:ronaelmoura240@gmail.com'
+    }
+  }
+
+  return (
+    <>
+      <a className="skip-link" href="#conteudo">Pular para o conteúdo</a>
+      <div className="scroll-progress" style={{ transform: `scaleX(${progress / 100})` }} />
+      <div className="pointer-glow" aria-hidden="true" />
+      <Header onCommand={() => setCommandOpen(true)} />
+      <CommandMenu open={commandOpen} onClose={() => setCommandOpen(false)} />
+
+      <main id="conteudo">
+        <section className="hero" id="inicio">
+          <div className="hero-copy">
+            <div className="availability"><i /> Ronas Tech em operação · aberto a novos desafios</div>
+            <p className="hero-kicker"><span>FULL STACK ENGINEER · RONAS TECH</span><b>CE · BRASIL</b></p>
+            <h1>Software que<br />aguenta o <em>mundo real.</em></h1>
+            <p className="hero-lead">Eu sou <strong>Ronael Moura.</strong> Projeto e construo aplicações completas — da regra de negócio à experiência final — com engenharia pragmática, testes e visão de produto.</p>
+            <div className="hero-actions"><a className="button button-primary" href="#projetos">Explorar projetos <Arrow /></a><a className="button button-ghost" href="https://ronas-desk.onrender.com" target="_blank" rel="noreferrer">Abrir produto ao vivo <Arrow /></a></div>
           </div>
-          <div className="desk-showcase reveal">
-            <div className="app-window">
-              <div className="window-bar"><div><i /><i /><i /></div><span>app.ronasdesk.local/dashboard</span><small>● Seguro</small></div>
-              <div className="app-layout">
-                <aside><div className="app-logo">R<span>D</span></div>{['▦', '◫', '◎', '▤', '⚙'].map((x,i)=><b className={i===0?'active':''} key={i}>{x}</b>)}</aside>
-                <div className="dashboard">
-                  <div className="dash-top"><div><small>VISÃO GERAL</small><h3>Central de suporte</h3></div><button>+ Novo chamado</button></div>
-                  <div className="dash-stats"><div><span>Total</span><strong>48</strong><i>+12%</i></div><div><span>Em aberto</span><strong>12</strong><i>Agora</i></div><div><span>Em andamento</span><strong>08</strong><i>Ativos</i></div><div><span>Concluídos</span><strong>28</strong><i>58%</i></div></div>
-                  <div className="dash-bottom"><div className="chart"><span>Chamados da semana</span><div className="bars">{[38,58,42,76,64,92,55].map((h,i)=><i key={i} style={{height:`${h}%`}} />)}</div></div><div className="recent"><span>Atividade recente</span>{['Falha no acesso', 'Configurar estação', 'Atualização concluída'].map((x,i)=><p key={x}><i className={`priority p${i}`} />{x}<small>{i+1}h</small></p>)}</div></div>
-                </div>
+          <div className="hero-visual"><div className="visual-orbit orbit-one" /><div className="visual-orbit orbit-two" /><ProductConsole /><div className="floating-note note-top"><span>01</span><p>Produto publicado<br /><strong>produção real</strong></p></div><div className="floating-note note-bottom"><span>02</span><p>Arquitetura<br /><strong>ponta a ponta</strong></p></div></div>
+          <div className="hero-proof"><div><strong>34</strong><span>repositórios públicos</span></div><div><strong>370</strong><span>testes no projeto principal</span></div><div><strong>01</strong><span>operação digital ativa</span></div><p>Engenharia aplicada, documentada e disponível para inspeção.</p></div>
+        </section>
+
+        <section className="current-work-section" id="trabalho-atual">
+          <div className="section-shell">
+            <div className="current-work-label" data-reveal><span>TRABALHO ATUAL</span><small>RONAS TECH · 2026</small></div>
+            <div className="current-work-grid">
+              <div className="current-work-copy" data-reveal>
+                <p className="eyebrow"><span /> NEGÓCIO DIGITAL EM OPERAÇÃO</p>
+                <h2>Suporte técnico<br /><em>com clareza radical.</em></h2>
+                <p>Hoje conduzo a <strong>Ronas Tech</strong>, uma operação de suporte remoto para Windows em todo o Brasil. Eu conecto diagnóstico técnico, experiência digital e atendimento direto para devolver tempo e confiança a quem depende do computador.</p>
+                <div className="work-actions"><a className="button button-dark" href="https://www.ronastech.com.br/" target="_blank" rel="noreferrer">Conhecer a Ronas Tech <Arrow /></a><span>Produto, operação e atendimento<br />desenhados ponta a ponta.</span></div>
               </div>
+              <div className="current-work-visual" data-reveal><SupportConsole /></div>
             </div>
-            <div className="showcase-copy">
-              <span className="version">VERSÃO ATUAL · v0.8</span>
-              <h3>Mais que um CRUD.<br />Um produto em evolução.</h3>
-              <p>O Ronas Desk simula um ambiente real de Help Desk e concentra a evolução técnica de Ronael: interface, API, regras de negócio, banco de dados e decisões de produto.</p>
-              <ul><li>React + Vite no front-end</li><li>Node.js + Express na API REST</li><li>MySQL para persistência de dados</li><li>Arquitetura em camadas</li></ul>
-              <a className="button primary" href="https://github.com/ronaelmoura/ronas-desk" target="_blank" rel="noreferrer">Explorar repositório <Arrow /></a>
-            </div>
+            <div className="work-proof" data-reveal><div><strong>Brasil</strong><span>atendimento remoto</span></div><div><strong>09h–00h</strong><span>todos os dias</span></div><div><strong>≤ 1h</strong><span>resposta inicial</span></div><div><strong>R$ 0</strong><span>triagem pelo WhatsApp</span></div></div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <section className="section features">
-        <div className="container"><SectionHead tag="FUNCIONALIDADES" title="Tudo o que o suporte precisa. Em um só fluxo." text="Cada módulo nasce de uma necessidade real e se conecta ao restante do produto." />
-          <div className="feature-grid">{features.map((item, index) => <article className="feature-card reveal" key={item.title}><div><span>{item.icon}</span><i>0{index+1}</i></div><h3>{item.title}</h3><p>{item.text}</p></article>)}</div>
-        </div>
-      </section>
+        <section className="projects-section" id="projetos">
+          <div className="section-shell">
+            <SectionIntro eyebrow="PROJETOS SELECIONADOS" title={<>Código é detalhe.<br /><em>Resultado é o produto.</em></>} text="Cases escolhidos para mostrar decisões, amplitude técnica e atenção ao que acontece depois do deploy." />
 
-      <section className="section roadmap-section">
-        <div className="container"><SectionHead tag="ROADMAP" title="Construindo em público. Evoluindo com propósito." />
-          <div className="roadmap reveal">{roadmap.map(item => <article className={item.active ? 'active' : ''} key={item.version}><div className="road-dot" /><div className="road-meta"><strong>{item.version}</strong><span>{item.state}</span></div><h3>{item.title}</h3><p>{item.text}</p></article>)}</div>
-          <p className="road-note reveal">Roadmap vivo: prioridades podem evoluir conforme testes, feedback e aprendizado do produto.</p>
-        </div>
-      </section>
+            <article className="flagship" id="ronas-desk" data-reveal>
+              <div className="flagship-top"><p><span>01</span> CASE PRINCIPAL · PRODUTO FULL STACK</p><div><i /> ONLINE</div></div>
+              <div className="flagship-grid">
+                <div className="flagship-copy"><span className="version-pill">RONAS DESK · v1.0.0</span><h3>Uma operação de suporte.<br /><em>Projetada como produto.</em></h3><p>Mais que um CRUD: autenticação por papéis, SLA, auditoria, anexos privados, relatórios e uma conta demo segura — construídos, testados e publicados.</p><div className="flagship-actions"><a className="button button-primary" href="https://ronas-desk.onrender.com" target="_blank" rel="noreferrer">Testar conta demo <Arrow /></a><a className="text-link" href="https://github.com/ronaelmoura/ronas-desk" target="_blank" rel="noreferrer">Inspecionar código <Arrow /></a></div></div>
+                <div className="flagship-visual"><div className="app-chrome"><div><i /><i /><i /></div><span>ronas-desk.onrender.com/dashboard</span><small>SEGURO</small></div><DeskDashboard /></div>
+              </div>
+              <div className="case-console">
+                <div className="case-tabs" role="tablist" aria-label="Detalhes do case">{Object.entries(consoleTabs).map(([key, tab]) => <button role="tab" aria-selected={activeConsoleTab === key} className={activeConsoleTab === key ? 'active' : ''} key={key} onClick={() => setActiveConsoleTab(key)}>{tab.label}</button>)}</div>
+                <div className="case-content"><div><small>{consoleContent.label.toUpperCase()}</small><h4>{consoleContent.title}</h4><p>{consoleContent.text}</p></div><div className="case-stats">{consoleContent.stats.map(([value, label]) => <article key={label}><strong>{value}</strong><span>{label}</span></article>)}</div></div>
+              </div>
+            </article>
 
-      <section className="section about" id="sobre">
-        <div className="container about-grid">
-          <div className="about-title reveal"><p className="eyebrow"><span /> SOBRE MIM</p><h2>Técnica para construir.<br /><em>Curiosidade para evoluir.</em></h2></div>
-          <div className="about-copy reveal"><p className="large">Sou um Desenvolvedor Full Stack que acredita que a melhor forma de aprender é <strong>construindo, documentando e compartilhando.</strong></p><p>Minha experiência em suporte de TI me ensinou a ouvir, investigar e resolver. Hoje levo esse olhar para o desenvolvimento de interfaces, APIs e produtos digitais completos.</p><p>Na <strong>Ronas Tech</strong>, transformo erros e aprendizados reais em conteúdo técnico direto. No <strong>Ronas Desk</strong>, aplico essa evolução em um produto com propósito.</p>
-            <div className="about-links"><a href="https://www.linkedin.com/in/ronael-moura" target="_blank" rel="noreferrer">LinkedIn <Arrow /></a><a href="https://www.youtube.com/@RonasTech" target="_blank" rel="noreferrer">Canal Ronas Tech <Arrow /></a></div>
+            <div className="project-toolbar" data-reveal><p>Outros trabalhos</p><div role="group" aria-label="Filtrar projetos">{[['all', 'Todos'], ['client', 'Clientes'], ['backend', 'Back-end'], ['opensource', 'Open source'], ['frontend', 'Front-end']].map(([key, label]) => <button className={activeFilter === key ? 'active' : ''} onClick={() => setActiveFilter(key)} key={key}>{label}</button>)}</div></div>
+            <div className="project-grid">{visibleProjects.map((project) => <ProjectCard project={project} key={project.title} />)}</div>
+            <a className="all-projects-link" href="https://github.com/ronaelmoura?tab=repositories" target="_blank" rel="noreferrer" data-reveal><span>Ver os 34 repositórios no GitHub</span><Arrow /></a>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <section className="section stack" id="stack">
-        <div className="container"><SectionHead tag="TECNOLOGIAS" title="Uma stack moderna para produtos completos." text="Ferramentas escolhidas para criar soluções úteis, legíveis e prontas para evoluir." />
-          <div className="tech-grid">{techGroups.map(group => <article className="tech-card reveal" key={group.title}><div className="tech-icon">{group.icon}</div><small>{group.eyebrow}</small><h3>{group.title}</h3><p>{group.text}</p><div>{group.items.map(x=><span key={x}>{x}</span>)}</div></article>)}</div>
-        </div>
-      </section>
-
-      <section className="section process-section" id="processo">
-        <div className="container"><SectionHead tag="COMO EU DESENVOLVO SOFTWARE" title="Processo claro. Decisões conscientes. Evolução contínua." />
-          <div className="process-grid">{process.map(([n,title,text])=><article className="process-card reveal" key={n}><span>{n}</span><div><h3>{title}</h3><p>{text}</p></div></article>)}</div>
-        </div>
-      </section>
-
-      <section className="section journey" id="jornada">
-        <div className="container"><SectionHead tag="MINHA JORNADA" title="Da curiosidade ao desenvolvimento de produtos reais." text="Uma trajetória construída entre formação, suporte, prática constante e compartilhamento de conhecimento." />
-          <div className="journey-grid reveal">
-            <div className="journey-line" />
-            <article><span>01</span><small>BASE TÉCNICA</small><h3>Suporte em TI</h3><p>Manutenção de computadores, atendimento a usuários e solução de problemas: a base para entender tecnologia pela perspectiva de quem usa.</p></article>
-            <article><span>02</span><small>FORMAÇÃO</small><h3>Full Stack no SENAI</h3><p>670 horas de formação, conceito final APTO e fundamentos sólidos de front-end, back-end, APIs, banco de dados, testes e versionamento.</p></article>
-            <article><span>03</span><small>CONSTRUÇÃO PÚBLICA</small><h3>Ronas Tech</h3><p>Projetos no GitHub, portfólio e tutoriais que transformam desafios de npm, Node.js, Git e Windows em conhecimento compartilhado.</p></article>
-            <article><span>04</span><small>PRODUTO AUTORAL</small><h3>Ronas Desk</h3><p>O passo seguinte: reunir interface, arquitetura, API e dados em uma aplicação Full Stack pensada como produto real.</p></article>
+        <section className="expertise-section" id="especialidades">
+          <div className="section-shell">
+            <SectionIntro dark eyebrow="COMO EU PENSO" title={<>Do problema ao deploy.<br /><em>Sem perder o contexto.</em></>} text="A melhor solução técnica é a que permanece compreensível, segura e útil quando encontra usuários, dados e mudanças reais." />
+            <div className="expertise-grid">{expertise.map((item) => <article key={item.number} data-reveal><span>{item.number}</span><div className="expertise-icon"><i /><i /></div><h3>{item.title}</h3><p>{item.text}</p><small>{item.meta}</small></article>)}</div>
           </div>
-        </div>
-      </section>
+          <div className="stack-marquee" aria-label="Tecnologias"><div>{['React', 'TypeScript', 'Node.js', 'Express', 'MySQL', 'Docker', 'Vitest', 'REST APIs', 'GitHub Actions', 'Cloudinary', 'React', 'TypeScript', 'Node.js', 'Express', 'MySQL', 'Docker', 'Vitest', 'REST APIs', 'GitHub Actions', 'Cloudinary'].map((item, index) => <span key={`${item}-${index}`}>{item}<i>✦</i></span>)}</div></div>
+        </section>
 
-      <section className="section credentials">
-        <div className="container"><SectionHead tag="FORMAÇÃO & CERTIFICADOS" title="Conhecimento validado. Prática em movimento." />
-          <div className="cert-grid">
-            <article className="cert-main reveal"><div className="seal">S<span>✓</span></div><div><span className="cert-tag">CERTIFICADO PRINCIPAL</span><p>SENAI PIAUÍ · 670 HORAS · CONCEITO APTO</p><h3>Programador<br />Full Stack</h3><ul><li>Desenvolvimento Front-End</li><li>Desenvolvimento Back-End</li><li>APIs, dados, testes e Git</li></ul></div><strong className="cert-year">2025</strong></article>
-            <div className="cert-side"><article className="reveal"><span>02</span><div><small>FORMAÇÃO COMPLEMENTAR</small><h3>Técnico em Suporte em TI</h3><p>Infraestrutura, manutenção e atendimento ao usuário.</p></div></article><article className="reveal"><span>03</span><div><small>PRODUTIVIDADE</small><h3>Pacote Office Completo</h3><p>Ferramentas para documentação, análise e comunicação.</p></div></article></div>
+        <section className="about-section" id="sobre">
+          <div className="section-shell about-grid">
+            <div className="portrait-column" data-reveal><div className="portrait-frame"><img src={portraitUrl} alt="Ronael Moura, desenvolvedor Full Stack" width="1100" height="1100" /><div className="portrait-stamp"><span>RM</span><p>BUILDING<br />IN PUBLIC</p></div></div><p className="portrait-caption">Ronael Moura · Ceará, Brasil<br />Criador da Ronas Tech</p></div>
+            <div className="about-copy" data-reveal><p className="eyebrow"><span /> SOBRE MIM</p><h2>Investigar primeiro.<br /><em>Construir com intenção.</em></h2><p className="about-lead">Minha base em suporte de TI me ensinou algo que levo para cada projeto: tecnologia só funciona quando resolve o problema de alguém.</p><p>Hoje conecto essa visão à engenharia de software. Trabalho entre interface, API, banco de dados, automação e deploy, sem perder de vista clareza, manutenção e experiência.</p><p>Na <strong>Ronas Tech</strong>, meu trabalho atual, reúno desenvolvimento, operação e atendimento técnico em uma experiência direta para clientes de todo o Brasil.</p><div className="about-signature"><span>Ronael Moura</span><small>FULL STACK ENGINEER · RONAS TECH</small></div></div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <section className="section other-projects">
-        <div className="container"><SectionHead tag="OUTROS PROJETOS" title="Aprendizado transformado em entregas." />
-          <div className="other-grid">
-            <article className="reveal"><span>01 · DEBUGGING</span><h3>Laboratório ERESOLVE npm</h3><p>Conflito real de dependências reproduzido, investigado e documentado passo a passo.</p><div><b>Node.js</b><b>npm</b><b>Documentação</b></div><a href="https://github.com/ronaelmoura/laboratorio-erro-eresolve-npm" target="_blank" rel="noreferrer">Ver código <Arrow /></a></article>
-            <article className="reveal"><span>02 · PRODUTO DIGITAL</span><h3>Ronas Tech Site</h3><p>Site institucional para apresentar serviços de desenvolvimento, sistemas web e soluções digitais.</p><div><b>React</b><b>Vite</b><b>CSS</b></div><a href="https://ronas-tech-site.vercel.app/" target="_blank" rel="noreferrer">Visitar projeto <Arrow /></a></article>
-            <article className="reveal"><span>03 · PORTFÓLIO</span><h3>Portfólio Ronas Tech</h3><p>Esta experiência: identidade profissional, performance e narrativa construídas em React.</p><div><b>React</b><b>UX/UI</b><b>SEO</b></div><a href="https://github.com/ronaelmoura/ronaelmoura.github.io" target="_blank" rel="noreferrer">Ver repositório <Arrow /></a></article>
+        <section className="journey-section">
+          <div className="section-shell">
+            <SectionIntro dark eyebrow="TRAJETÓRIA" title={<>Consistência antes<br />de <em>atalhos.</em></>} text="Uma evolução construída com formação, prática, produto próprio e aprendizado público." />
+            <div className="journey-list">{journey.map(([phase, title, text], index) => <article key={title} data-reveal><span>0{index + 1}</span><small>{phase}</small><h3>{title}</h3><p>{text}</p></article>)}</div>
+            <div className="credentials-row" data-reveal><div><span>670h</span><p>Formação Full Stack<br /><small>SENAI · Conceito apto</small></p></div><div><span>v1.0</span><p>Produto autoral publicado<br /><small>Conta demo disponível</small></p></div><div><span>CI</span><p>Qualidade automatizada<br /><small>Testes + lint + build</small></p></div></div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <section className="contact" id="contato"><div className="container"><div className="contact-card reveal"><p className="eyebrow"><span /> PRÓXIMO DESAFIO</p><h2>Vamos transformar uma ideia em <em>software real?</em></h2><p>Estou aberto a oportunidades como Desenvolvedor Full Stack, colaborações e projetos que gerem impacto.</p><div className="actions"><a className="button light" href="mailto:ronaelmoura240@gmail.com">Enviar um e-mail <Arrow /></a><a className="button outline" href="https://www.linkedin.com/in/ronael-moura" target="_blank" rel="noreferrer">Conectar no LinkedIn <Arrow /></a></div></div></div></section>
-    </main>
-    <footer><div className="container footer-grid"><a className="brand" href="#inicio"><img src="assets/favicon.png" alt="" /><span><strong>RONAS</strong> TECH</span></a><p>Desenvolvido com foco, prática e evolução.</p><div><a href="https://github.com/ronaelmoura" target="_blank" rel="noreferrer">GitHub</a><a href="https://www.linkedin.com/in/ronael-moura" target="_blank" rel="noreferrer">LinkedIn</a><a href="https://www.youtube.com/@RonasTech" target="_blank" rel="noreferrer">YouTube</a><a href="#inicio">Topo ↑</a></div><small>© {new Date().getFullYear()} Ronael Moura. Todos os direitos reservados.</small></div></footer>
-  </>
+        <section className="contact-section" id="contato">
+          <div className="contact-orbit" aria-hidden="true"><i /><i /><i /></div>
+          <div className="contact-inner" data-reveal><p className="eyebrow"><span /> PRÓXIMO DESAFIO</p><h2>Tem um problema<br />que merece <em>boa engenharia?</em></h2><p>Estou disponível para oportunidades em desenvolvimento Full Stack, produtos digitais e colaborações técnicas.</p><div className="contact-actions"><a className="button button-dark" href="mailto:ronaelmoura240@gmail.com">Iniciar conversa <Arrow /></a><button className="copy-button" onClick={copyEmail}>{copied ? 'E-mail copiado ✓' : 'Copiar e-mail'}</button></div></div>
+        </section>
+      </main>
+
+      <footer className="site-footer">
+        <div className="footer-brand"><span className="brand-mark">RM</span><div><strong>Ronael Moura</strong><small>Software que aguenta o mundo real.</small></div></div>
+        <div className="footer-socials">{socialLinks.map(([short, label, href]) => <a href={href} target="_blank" rel="noreferrer" key={label}><span>{short}</span>{label}<Arrow /></a>)}</div>
+        <p>© 2026 Ronael Moura<br /><span>Projetado e desenvolvido com intenção.</span></p>
+      </footer>
+    </>
+  )
 }
 
 export default App
