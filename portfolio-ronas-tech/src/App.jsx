@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import portraitUrl from '../assets/ronael-moura.webp'
-import dashboardPhotoUrl from '../assets/ronas-desk-dashboard-realistic.png'
+import demoDashboardUrl from '../assets/ronas-desk-demo-dashboard.png'
 import supportWorkspacePhotoUrl from '../assets/support-workspace-realistic.png'
 
 const projects = [
@@ -357,7 +357,7 @@ function App() {
               <div className="flagship-top"><p><span>01</span> CASE PRINCIPAL · PRODUTO FULL STACK</p><div><i /> ONLINE</div></div>
               <div className="flagship-grid">
                 <div className="flagship-copy"><span className="version-pill">RONAS DESK · v1.0.0</span><h3>Uma operação de suporte.<br /><em>Projetada como produto.</em></h3><p>Projeto autoral de portfólio que simula uma equipe de suporte. Desenvolvi interface, API, persistência e testes. A demonstração usa dados fictícios e acesso somente leitura; não representa uma operação comercial.</p><div className="flagship-actions"><a className="button button-primary" href="https://ronas-desk.onrender.com" target="_blank" rel="noreferrer"><Icon name="play" size={16} />Testar conta demo <Arrow /></a><a className="text-link" href="https://github.com/ronaelmoura/ronas-desk" target="_blank" rel="noreferrer"><Icon name="github" size={16} />Inspecionar código <Arrow /></a></div></div>
-                <figure className="flagship-visual realistic-figure"><img className="realistic-product-image" src={dashboardPhotoUrl} alt="Mockup fotográfico de um dashboard escuro de atendimento técnico" /><figcaption>Mockup visual · a interface e os dados reais estão disponíveis na demo.</figcaption></figure>
+                <figure className="flagship-visual demo-figure"><div className="demo-figure-label"><span><i /> DEMO REAL · READ-ONLY</span><a href="https://ronas-desk.onrender.com" target="_blank" rel="noreferrer">Abrir demo <Arrow /></a></div><img className="demo-product-image" src={demoDashboardUrl} alt="Painel real do Ronas Desk exibindo indicadores e chamados da conta de demonstração" /><figcaption>Painel real do Ronas Desk · dados de demonstração protegidos contra alterações.</figcaption></figure>
               </div>
               <div className="case-console">
                 <div className="case-tabs" role="tablist" aria-label="Detalhes do case">{Object.entries(consoleTabs).map(([key, tab]) => <button role="tab" id={`case-tab-${key}`} aria-controls="case-panel" tabIndex={activeConsoleTab === key ? 0 : -1} onKeyDown={(event) => {

@@ -206,6 +206,15 @@ a:hover .arrow, button:hover .arrow { transform: translate(3px,-3px); }
 .flagship-visual { min-width: 0; margin: 42px 42px 42px 0; align-self: center; overflow: hidden; border: 1px solid rgba(255,255,255,.12); border-radius: 14px; background: #0b0f15; box-shadow: 0 35px 80px rgba(0,0,0,.35); }
 .realistic-figure { margin: 42px 42px 42px 0; }
 .realistic-product-image { display: block; width: 100%; aspect-ratio: 16 / 10; object-fit: cover; filter: saturate(.82) contrast(1.05); }
+.demo-figure { position: relative; background: #edf2f8; }
+.demo-product-image { display: block; width: 100%; aspect-ratio: 1898 / 936; object-fit: contain; object-position: center; background: #edf2f8; }
+.demo-figure-label { position: absolute; z-index: 2; top: 14px; left: 14px; right: 14px; display: flex; align-items: center; justify-content: space-between; gap: 12px; pointer-events: none; }
+.demo-figure-label span, .demo-figure-label a { display: inline-flex; align-items: center; gap: 7px; padding: 7px 10px; border: 1px solid rgba(6,35,67,.14); border-radius: 99px; background: rgba(245,249,255,.88); color: #174c83; box-shadow: 0 8px 18px rgba(6,35,67,.1); backdrop-filter: blur(10px); font: 700 .58rem ui-monospace, monospace; letter-spacing: .04em; }
+.demo-figure-label a { pointer-events: auto; color: #066fd7; transition: color .2s ease, background .2s ease, transform .2s ease; }
+.demo-figure-label a:hover { color: #063b75; background: #fff; transform: translateY(-2px); }
+.demo-figure-label span i { width: 6px; height: 6px; border-radius: 50%; background: #10a86d; box-shadow: 0 0 0 4px rgba(16,168,109,.14); }
+.demo-figure-label .arrow { transition: transform .25s ease; }
+.demo-figure-label a:hover .arrow { transform: translateX(3px); }
 .app-chrome { height: 42px; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; padding: 0 13px; border-bottom: 1px solid rgba(255,255,255,.08); color: #606a76; font: 500 .48rem ui-monospace,monospace; }
 .app-chrome > div { display: flex; gap: 5px; }
 .app-chrome > div i { width: 6px; height: 6px; border-radius: 50%; background: #56606c; }
