@@ -569,6 +569,41 @@ a:hover .arrow, button:hover .arrow { transform: translate(3px,-3px); }
 .project-card > .visual-caption { color: #535d57; }
 [data-reveal]:focus-within { opacity: 1; transform: none; }
 
+/* Interaction polish: a shared icon language and tactile button states. */
+.icon { display: inline-block; flex: 0 0 auto; vertical-align: middle; }
+.arrow { display: inline-flex; transform-origin: center; }
+.button, .header-cta, .text-link, .copy-button, .project-links a, .command-trigger, .command-head button, .menu-toggle, .project-toolbar button, .case-tabs button { position: relative; }
+.button, .copy-button { transition: transform .22s cubic-bezier(.2,.8,.2,1), background .22s ease, border-color .22s ease, box-shadow .22s ease, color .22s ease; }
+.button { gap: 11px; box-shadow: 0 8px 20px rgba(0,0,0,.12); }
+.button:hover { transform: translateY(-3px); box-shadow: 0 14px 28px rgba(0,0,0,.22); }
+.button:active { transform: translateY(-1px) scale(.985); }
+.button-primary:hover { background: #a0ffdf; box-shadow: 0 16px 34px rgba(132,245,208,.2); }
+.button-ghost { background: rgba(255,255,255,.02); }
+.button-dark:hover { background: #202831; }
+.button .icon, .header-cta .icon, .text-link .icon, .copy-button .icon, .project-links a .icon, .command-trigger .icon, .footer-socials a .icon { transition: transform .22s ease, color .22s ease; }
+.button:hover .icon, .header-cta:hover .icon, .text-link:hover .icon, .copy-button:hover .icon, .project-links a:hover .icon, .command-trigger:hover .icon, .footer-socials a:hover .icon { transform: translateY(-1px); }
+.header-cta { padding: 10px 0 10px 12px; border-radius: 6px; transition: color .2s ease, background .2s ease, padding .2s ease; }
+.header-cta:hover { padding-inline: 12px 9px; color: var(--accent); background: rgba(132,245,208,.07); }
+.command-trigger { transition: border-color .2s ease, background .2s ease, transform .2s ease; }
+.command-trigger:hover { border-color: rgba(132,245,208,.42); background: rgba(132,245,208,.07); transform: translateY(-1px); }
+.command-trigger > .icon { color: var(--accent); }
+.command-head button { transition: color .2s ease, border-color .2s ease, background .2s ease; }
+.command-head button:hover { color: var(--paper); border-color: rgba(132,245,208,.42); background: rgba(132,245,208,.08); }
+.text-link { transition: color .2s ease, gap .2s ease; }
+.text-link:hover { color: var(--accent); gap: 14px; }
+.project-links a { align-items: center; transition: color .2s ease, transform .2s ease; }
+.project-links a:hover { color: #0b5e4a; transform: translateX(2px); }
+.project-links a + a:hover { color: var(--ink); }
+.copy-button { display: inline-flex; align-items: center; justify-content: center; gap: 10px; background: rgba(255,255,255,.28); }
+.copy-button:hover { border-color: #244a3e; background: #dce5d9; transform: translateY(-2px); }
+.copy-button:active { transform: translateY(0) scale(.985); }
+.footer-socials a > span { display: grid; place-items: center; width: 28px; height: 28px; border: 1px solid rgba(255,255,255,.16); border-radius: 50%; color: var(--muted); transition: color .2s ease, border-color .2s ease, background .2s ease, transform .2s ease; }
+.footer-socials a:hover > span { color: var(--accent); border-color: rgba(132,245,208,.55); background: rgba(132,245,208,.08); transform: translateY(-2px); }
+.menu-toggle { cursor: pointer; transition: color .2s ease, border-color .2s ease, background .2s ease, transform .2s ease; }
+.menu-toggle:hover { border-color: rgba(132,245,208,.45); color: var(--accent); background: rgba(132,245,208,.07); transform: rotate(-4deg); }
+.evidence-links a { display: inline-flex; align-items: center; gap: 8px; transition: color .2s ease, gap .2s ease; }
+.evidence-links a:hover { gap: 11px; color: var(--accent); }
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *,*::before,*::after { animation: none !important; transition: none !important; }
