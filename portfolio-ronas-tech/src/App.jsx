@@ -87,13 +87,31 @@ const consoleTabs = {
 }
 
 const socialLinks = [
-  ['GH', 'GitHub', 'https://github.com/ronaelmoura'],
-  ['IN', 'LinkedIn', 'https://www.linkedin.com/in/ronael-moura'],
-  ['YT', 'YouTube', 'https://www.youtube.com/@RonasTech'],
+  ['github', 'GitHub', 'https://github.com/ronaelmoura'],
+  ['linkedin', 'LinkedIn', 'https://www.linkedin.com/in/ronael-moura'],
+  ['youtube', 'YouTube', 'https://www.youtube.com/@RonasTech'],
 ]
 
+function Icon({ name, size = 18 }) {
+  const paths = {
+    arrow: <><path d="M5 19 19 5" /><path d="M8 5h11v11" /></>,
+    external: <><path d="M14 5h5v5" /><path d="m19 5-8 8" /><path d="M18 13v5a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5" /></>,
+    github: <><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3.2-.4 6.5-1.6 6.5-7A5.4 5.4 0 0 0 19 3.8 5 5 0 0 0 18.9 1S17.7.6 15 2.4a13.4 13.4 0 0 0-7 0C5.3.6 4.1 1 4.1 1A5 5 0 0 0 4 3.8 5.4 5.4 0 0 0 2.5 7.5c0 5.4 3.3 6.6 6.5 7A4.8 4.8 0 0 0 8 18v4" /><path d="M8 17c-3 .9-3-1.4-4.2-1.8" /></>,
+    linkedin: <><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6Z" /><path d="M2 9h4v12H2z" /><path d="M4 6a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" /></>,
+    youtube: <><path d="M22.5 6.2a2.8 2.8 0 0 0-2-2C18.7 3.7 12 3.7 12 3.7s-6.7 0-8.5.5a2.8 2.8 0 0 0-2 2A29 29 0 0 0 1 12a29 29 0 0 0 .5 5.8 2.8 2.8 0 0 0 2 2c1.8.5 8.5.5 8.5.5s6.7 0 8.5-.5a2.8 2.8 0 0 0 2-2A29 29 0 0 0 23 12a29 29 0 0 0-.5-5.8Z" /><path d="m10 15 5-3-5-3v6Z" /></>,
+    mail: <><rect x="3" y="5" width="18" height="14" rx="2" /><path d="m3 7 9 6 9-6" /></>,
+    file: <><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z" /><path d="M14 2v6h6M8 13h8M8 17h6" /></>,
+    copy: <><rect x="9" y="9" width="11" height="11" rx="2" /><path d="M15 9V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h3" /></>,
+    check: <><path d="m5 12 4 4L19 6" /></>,
+    command: <><path d="M18 7a3 3 0 1 0-3-3v16a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3V4a3 3 0 1 0-3 3h12Z" /></>,
+    layers: <><path d="m12 2 9 5-9 5-9-5 9-5Z" /><path d="m3 12 9 5 9-5M3 17l9 5 9-5" /></>,
+    play: <path d="m8 5 11 7-11 7V5Z" />,
+  }
+  return <svg className={`icon icon-${name}`} width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{paths[name]}</svg>
+}
+
 function Arrow() {
-  return <span className="arrow" aria-hidden="true">↗</span>
+  return <Icon name="arrow" size={16} />
 }
 
 function SectionIntro({ eyebrow, title, text, dark = false }) {
@@ -147,8 +165,8 @@ function Header({ onCommand }) {
       </nav>
       <div className="header-tools">
         <span className="local-time">CE {localTime}</span>
-        <button className="command-trigger" onClick={onCommand} aria-label="Abrir atalhos"><span>Ir para</span><kbd>⌘ K</kbd></button>
-        <a className="header-cta" href="mailto:ronaelmoura240@gmail.com">Vamos conversar <Arrow /></a>
+        <button className="command-trigger" onClick={onCommand} aria-label="Abrir atalhos"><Icon name="command" size={14} /><span>Ir para</span><kbd>⌘ K</kbd></button>
+        <a className="header-cta" href="mailto:ronaelmoura240@gmail.com"><Icon name="mail" size={16} />Vamos conversar <Arrow /></a>
       </div>
       <button ref={menuButton} className="menu-toggle" onClick={() => setMenuOpen((value) => !value)} aria-controls="main-navigation" aria-expanded={menuOpen} aria-label="Alternar menu"><span /><span /></button>
     </header>
@@ -211,7 +229,7 @@ function ProductConsole() {
           <article><small>status</small><strong>Live</strong><span>demo pública</span></article>
         </div>
         <div className="console-grid">
-          <div className="evidence-links"><a href="https://github.com/ronaelmoura/ronas-desk#-segurança-e-integração-contínua" target="_blank" rel="noreferrer">Consultar escopo dos testes ↗</a><a href="https://github.com/ronaelmoura/ronas-desk/actions" target="_blank" rel="noreferrer">Ver execuções de CI ↗</a></div>
+          <div className="evidence-links"><a href="https://github.com/ronaelmoura/ronas-desk#-segurança-e-integração-contínua" target="_blank" rel="noreferrer">Consultar escopo dos testes <Icon name="external" size={14} /></a><a href="https://github.com/ronaelmoura/ronas-desk/actions" target="_blank" rel="noreferrer">Ver execuções de CI <Icon name="external" size={14} /></a></div>
           <div className="console-log"><small>Execução dos testes</small><p><i /> backend · CI <b>307</b></p><p><i /> frontend · CI <b>54</b></p><p><i /> integração · local <b>9</b></p></div>
         </div>
       </div>
@@ -250,7 +268,7 @@ function ProjectCard({ project }) {
       <ProjectVisual type={project.visual} />
       <p className="visual-caption">Representação ilustrativa do projeto · não é uma captura da aplicação.</p>
       <div className="project-card-body"><h3>{project.title}</h3><p>{project.description}</p><div className="tag-list">{project.tags.map((tag) => <span key={tag}>{tag}</span>)}</div></div>
-      <div className="project-links"><a href={project.link} target="_blank" rel="noreferrer">{project.cta || (project.source ? 'Abrir projeto' : 'Ver repositório')} <Arrow /></a>{project.source && <a href={project.source} target="_blank" rel="noreferrer">Código <Arrow /></a>}</div>
+      <div className="project-links"><a href={project.link} target="_blank" rel="noreferrer">{project.cta || (project.source ? 'Abrir projeto' : 'Ver repositório')} <Icon name={project.link.includes('github.com') ? 'github' : 'external'} size={15} /></a>{project.source && <a href={project.source} target="_blank" rel="noreferrer"><Icon name="github" size={15} />Código</a>}</div>
     </article>
   )
 }
@@ -325,7 +343,7 @@ function App() {
             <p className="hero-kicker"><span>REACT · NODE.JS · TYPESCRIPT</span><b>CE · BRASIL</b></p>
             <h1>Ronael Moura.<br /><em>Desenvolvedor Full Stack.</em></h1>
             <p className="hero-lead">Construo aplicações web com <strong>React, Node.js e TypeScript</strong>, APIs, bancos relacionais e testes automatizados. Minha experiência em suporte técnico orienta soluções centradas em quem usa.</p>
-            <div className="hero-actions"><a className="button button-primary" href="#projetos">Explorar projetos <Arrow /></a><a className="button button-ghost" href="https://raw.githubusercontent.com/ronaelmoura/ronaelmoura/main/assets/curriculo-ronael-moura.pdf" target="_blank" rel="noreferrer">Ver currículo em PDF <Arrow /></a></div>
+            <div className="hero-actions"><a className="button button-primary" href="#projetos"><Icon name="layers" size={17} />Explorar projetos <Arrow /></a><a className="button button-ghost" href="https://raw.githubusercontent.com/ronaelmoura/ronaelmoura/main/assets/curriculo-ronael-moura.pdf" target="_blank" rel="noreferrer"><Icon name="file" size={17} />Ver currículo em PDF <Arrow /></a></div>
           </div>
           <div className="hero-visual"><div className="visual-orbit orbit-one" /><div className="visual-orbit orbit-two" /><ProductConsole /><div className="floating-note note-top"><span>01</span><p>Projeto autoral<br /><strong>demo pública</strong></p></div><div className="floating-note note-bottom"><span>02</span><p>Arquitetura<br /><strong>ponta a ponta</strong></p></div></div>
           <div className="hero-proof"><div><strong>React</strong><span>interfaces e aplicações web</span></div><div><strong>370</strong><span>testes no projeto principal</span></div><div><strong>Node.js</strong><span>APIs e regras de negócio</span></div><p>Engenharia aplicada, documentada e disponível para inspeção.</p></div>
@@ -338,7 +356,7 @@ function App() {
             <article className="flagship" id="ronas-desk" tabIndex={-1} data-reveal>
               <div className="flagship-top"><p><span>01</span> CASE PRINCIPAL · PRODUTO FULL STACK</p><div><i /> ONLINE</div></div>
               <div className="flagship-grid">
-                <div className="flagship-copy"><span className="version-pill">RONAS DESK · v1.0.0</span><h3>Uma operação de suporte.<br /><em>Projetada como produto.</em></h3><p>Projeto autoral de portfólio que simula uma equipe de suporte. Desenvolvi interface, API, persistência e testes. A demonstração usa dados fictícios e acesso somente leitura; não representa uma operação comercial.</p><div className="flagship-actions"><a className="button button-primary" href="https://ronas-desk.onrender.com" target="_blank" rel="noreferrer">Testar conta demo <Arrow /></a><a className="text-link" href="https://github.com/ronaelmoura/ronas-desk" target="_blank" rel="noreferrer">Inspecionar código <Arrow /></a></div></div>
+                <div className="flagship-copy"><span className="version-pill">RONAS DESK · v1.0.0</span><h3>Uma operação de suporte.<br /><em>Projetada como produto.</em></h3><p>Projeto autoral de portfólio que simula uma equipe de suporte. Desenvolvi interface, API, persistência e testes. A demonstração usa dados fictícios e acesso somente leitura; não representa uma operação comercial.</p><div className="flagship-actions"><a className="button button-primary" href="https://ronas-desk.onrender.com" target="_blank" rel="noreferrer"><Icon name="play" size={16} />Testar conta demo <Arrow /></a><a className="text-link" href="https://github.com/ronaelmoura/ronas-desk" target="_blank" rel="noreferrer"><Icon name="github" size={16} />Inspecionar código <Arrow /></a></div></div>
                 <figure className="flagship-visual realistic-figure"><img className="realistic-product-image" src={dashboardPhotoUrl} alt="Mockup fotográfico de um dashboard escuro de atendimento técnico" /><figcaption>Mockup visual · a interface e os dados reais estão disponíveis na demo.</figcaption></figure>
               </div>
               <div className="case-console">
@@ -369,7 +387,7 @@ function App() {
                 <p className="eyebrow"><span /> EXPERIÊNCIA PROFISSIONAL</p>
                 <h2>Do atendimento<br /><em>ao desenvolvimento.</em></h2>
                 <p>Hoje conduzo a <strong>Ronas Tech</strong>, uma operação de suporte remoto para Windows em todo o Brasil. Eu conecto diagnóstico técnico, experiência digital e atendimento direto para devolver tempo e confiança a quem depende do computador.</p>
-                <div className="work-actions"><a className="button button-dark" href="https://www.ronastech.com.br/" target="_blank" rel="noreferrer">Conhecer a Ronas Tech <Arrow /></a><span>Diagnóstico técnico, presença digital<br />e atendimento direto.</span></div>
+                <div className="work-actions"><a className="button button-dark" href="https://www.ronastech.com.br/" target="_blank" rel="noreferrer"><Icon name="external" size={16} />Conhecer a Ronas Tech <Arrow /></a><span>Diagnóstico técnico, presença digital<br />e atendimento direto.</span></div>
               </div>
               <div className="current-work-visual" data-reveal><SupportConsole /></div>
             </div>
@@ -402,13 +420,13 @@ function App() {
 
         <section className="contact-section" id="contato" tabIndex={-1}>
           <div className="contact-orbit" aria-hidden="true"><i /><i /><i /></div>
-          <div className="contact-inner" data-reveal><p className="eyebrow"><span /> PRÓXIMO DESAFIO</p><h2>Tem um problema<br />que merece <em>boa engenharia?</em></h2><p>Estou disponível para oportunidades em desenvolvimento Full Stack, produtos digitais e colaborações técnicas.</p><div className="contact-actions"><a className="button button-dark" href="mailto:ronaelmoura240@gmail.com">Iniciar conversa <Arrow /></a><button className="copy-button" onClick={copyEmail}>{copied ? 'E-mail copiado ✓' : 'Copiar e-mail'}</button><span className="sr-only" role="status">{copied ? 'E-mail copiado para a área de transferência.' : ''}</span></div></div>
+          <div className="contact-inner" data-reveal><p className="eyebrow"><span /> PRÓXIMO DESAFIO</p><h2>Tem um problema<br />que merece <em>boa engenharia?</em></h2><p>Estou disponível para oportunidades em desenvolvimento Full Stack, produtos digitais e colaborações técnicas.</p><div className="contact-actions"><a className="button button-dark" href="mailto:ronaelmoura240@gmail.com"><Icon name="mail" size={16} />Iniciar conversa <Arrow /></a><button className="copy-button" onClick={copyEmail}><Icon name={copied ? 'check' : 'copy'} size={16} />{copied ? 'E-mail copiado' : 'Copiar e-mail'}</button><span className="sr-only" role="status">{copied ? 'E-mail copiado para a área de transferência.' : ''}</span></div></div>
         </section>
       </main>
 
       <footer className="site-footer">
         <div className="footer-brand"><span className="brand-mark">RM</span><div><strong>Ronael Moura</strong><small>React · Node.js · TypeScript</small></div></div>
-        <div className="footer-socials">{socialLinks.map(([short, label, href]) => <a href={href} target="_blank" rel="noreferrer" key={label}><span>{short}</span>{label}<Arrow /></a>)}</div>
+        <div className="footer-socials">{socialLinks.map(([icon, label, href]) => <a href={href} target="_blank" rel="noreferrer" key={label}><span><Icon name={icon} size={16} /></span>{label}<Arrow /></a>)}</div>
         <p>© 2026 Ronael Moura<br /><span>Projetado e desenvolvido com intenção.</span></p>
       </footer>
     </>
