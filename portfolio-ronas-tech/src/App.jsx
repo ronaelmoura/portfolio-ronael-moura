@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import portraitUrl from '../assets/ronael-moura.webp'
 
 const projects = [
@@ -106,6 +106,20 @@ function SectionIntro({ eyebrow, title, text, dark = false }) {
 function Header({ onCommand }) {
   const [menuOpen, setMenuOpen] = useState(false)
   const [localTime, setLocalTime] = useState('')
+  const menuButton = useRef(null)
+
+  useEffect(() => {
+    if (!menuOpen) return
+    document.querySelector('#main-navigation a')?.focus()
+    const closeOnEscape = (event) => {
+      if (event.key === 'Escape') {
+        setMenuOpen(false)
+        menuButton.current?.focus()
+      }
+    }
+    window.addEventListener('keydown', closeOnEscape)
+    return () => window.removeEventListener('keydown', closeOnEscape)
+  }, [menuOpen])
 
   useEffect(() => {
     const format = () => setLocalTime(new Intl.DateTimeFormat('pt-BR', { hour: '2-digit', minute: '2-digit', timeZone: 'America/Fortaleza' }).format(new Date()))
@@ -122,7 +136,7 @@ function Header({ onCommand }) {
         <span className="brand-mark">RM</span>
         <span className="brand-copy"><strong>Ronael Moura</strong><small>Desenvolvedor Full Stack</small></span>
       </a>
-      <nav className={menuOpen ? 'main-nav is-open' : 'main-nav'} aria-label="Navegação principal">
+      <nav id="main-navigation" className={menuOpen ? 'main-nav is-open' : 'main-nav'} aria-label="Navegação principal">
         <a href="#projetos" onClick={close}>Projetos</a>
         <a href="#trabalho-atual" onClick={close}>Experiência</a>
         <a href="#especialidades" onClick={close}>Especialidades</a>
@@ -134,35 +148,52 @@ function Header({ onCommand }) {
         <button className="command-trigger" onClick={onCommand} aria-label="Abrir atalhos"><span>Ir para</span><kbd>⌘ K</kbd></button>
         <a className="header-cta" href="mailto:ronaelmoura240@gmail.com">Vamos conversar <Arrow /></a>
       </div>
-      <button className="menu-toggle" onClick={() => setMenuOpen((value) => !value)} aria-expanded={menuOpen} aria-label="Alternar menu"><span /><span /></button>
+      <button ref={menuButton} className="menu-toggle" onClick={() => setMenuOpen((value) => !value)} aria-controls="main-navigation" aria-expanded={menuOpen} aria-label="Alternar menu"><span /><span /></button>
     </header>
   )
 }
 
 function CommandMenu({ open, onClose }) {
-  if (!open) return null
+  const dialogRef = useRef(null)
+
+  useEffect(() => {
+    const dialog = dialogRef.current
+    if (open && !dialog.open) dialog.showModal()
+    if (!open && dialog.open) dialog.close()
+  }, [open])
+
+  useEffect(() => {
+    if (!open) return
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => { document.body.style.overflow = previousOverflow }
+  }, [open])
 
   const items = [
-    ['01', 'Trabalho atual', '#trabalho-atual'],
-    ['02', 'Projeto principal', '#ronas-desk'],
-    ['03', 'Todos os projetos', '#projetos'],
+    ['01', 'Projeto principal', '#ronas-desk'],
+    ['02', 'Todos os projetos', '#projetos'],
+    ['03', 'Experiência profissional', '#trabalho-atual'],
     ['04', 'Sobre mim', '#sobre'],
     ['05', 'Contato', '#contato'],
   ]
 
   const go = (href) => {
-    document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' })
+    dialogRef.current.close()
     onClose()
+    const target = document.querySelector(href)
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    target?.scrollIntoView({ behavior: reducedMotion ? 'instant' : 'smooth' })
+    target?.focus({ preventScroll: true })
   }
 
   return (
-    <div className="command-backdrop" role="presentation" onMouseDown={onClose}>
-      <div className="command-menu" role="dialog" aria-modal="true" aria-label="Atalhos de navegação" onMouseDown={(event) => event.stopPropagation()}>
+    <dialog ref={dialogRef} className="command-backdrop" aria-label="Atalhos de navegação" onCancel={(event) => { event.preventDefault(); onClose() }} onClick={(event) => { if (event.target === event.currentTarget) onClose() }}>
+      <div className="command-menu">
         <div className="command-head"><span>NAVEGAÇÃO RÁPIDA</span><button onClick={onClose}>ESC</button></div>
         <div className="command-list">{items.map(([number, label, href]) => <button key={href} onClick={() => go(href)}><span>{number}</span>{label}<Arrow /></button>)}</div>
-        <div className="command-foot">Use o mouse ou pressione ESC para fechar.</div>
+        <div className="command-foot">Tab para navegar · Enter para selecionar · Esc para fechar.</div>
       </div>
-    </div>
+    </dialog>
   )
 }
 
@@ -259,7 +290,6 @@ function App() {
     }
     const keyboard = (event) => {
       if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') { event.preventDefault(); setCommandOpen((value) => !value) }
-      if (event.key === 'Escape') setCommandOpen(false)
     }
     update()
     window.addEventListener('scroll', update, { passive: true })
@@ -285,7 +315,7 @@ function App() {
     try {
       await navigator.clipboard.writeText('ronaelmoura240@gmail.com')
       setCopied(true)
-      window.setTimeout(() => setCopied(false), 1800)
+      window.setTimeout(() => setCopied(false), 3000)
     } catch {
       window.location.href = 'mailto:ronaelmoura240@gmail.com'
     }
@@ -299,7 +329,7 @@ function App() {
       <Header onCommand={() => setCommandOpen(true)} />
       <CommandMenu open={commandOpen} onClose={() => setCommandOpen(false)} />
 
-      <main id="conteudo">
+      <main id="conteudo" tabIndex={-1}>
         <section className="hero" id="inicio">
           <div className="hero-copy">
             <div className="availability"><i /> Disponível para oportunidades em desenvolvimento</div>
@@ -312,29 +342,37 @@ function App() {
           <div className="hero-proof"><div><strong>React</strong><span>interfaces e aplicações web</span></div><div><strong>370</strong><span>testes no projeto principal</span></div><div><strong>Node.js</strong><span>APIs e regras de negócio</span></div><p>Engenharia aplicada, documentada e disponível para inspeção.</p></div>
         </section>
 
-        <section className="projects-section" id="projetos">
+        <section className="projects-section" id="projetos" tabIndex={-1}>
           <div className="section-shell">
             <SectionIntro eyebrow="PROJETOS SELECIONADOS" title={<>Projetos, decisões<br /><em>e código aberto.</em></>} text="Projetos autorais de demonstração e trabalhos publicados. Explore o contexto, as decisões e o código de cada entrega." />
 
-            <article className="flagship" id="ronas-desk" data-reveal>
+            <article className="flagship" id="ronas-desk" tabIndex={-1} data-reveal>
               <div className="flagship-top"><p><span>01</span> CASE PRINCIPAL · PRODUTO FULL STACK</p><div><i /> ONLINE</div></div>
               <div className="flagship-grid">
                 <div className="flagship-copy"><span className="version-pill">RONAS DESK · v1.0.0</span><h3>Uma operação de suporte.<br /><em>Projetada como produto.</em></h3><p>Projeto autoral de portfólio que simula uma equipe de suporte. Desenvolvi interface, API, persistência e testes. A demonstração usa dados fictícios e acesso somente leitura; não representa uma operação comercial.</p><div className="flagship-actions"><a className="button button-primary" href="https://ronas-desk.onrender.com" target="_blank" rel="noreferrer">Testar conta demo <Arrow /></a><a className="text-link" href="https://github.com/ronaelmoura/ronas-desk" target="_blank" rel="noreferrer">Inspecionar código <Arrow /></a></div></div>
                 <div className="flagship-visual"><p className="visual-caption">Interface ilustrativa · dados fictícios, não métricas de clientes.</p><div className="app-chrome"><div><i /><i /><i /></div><span>ronas-desk.onrender.com/dashboard</span><small>ILUSTRAÇÃO</small></div><DeskDashboard /></div>
               </div>
               <div className="case-console">
-                <div className="case-tabs" role="tablist" aria-label="Detalhes do case">{Object.entries(consoleTabs).map(([key, tab]) => <button role="tab" aria-selected={activeConsoleTab === key} className={activeConsoleTab === key ? 'active' : ''} key={key} onClick={() => setActiveConsoleTab(key)}>{tab.label}</button>)}</div>
-                <div className="case-content"><div><small>{consoleContent.label.toUpperCase()}</small><h4>{consoleContent.title}</h4><p>{consoleContent.text}</p></div><div className="case-stats">{consoleContent.stats.map(([value, label]) => <article key={label}><strong>{value}</strong><span>{label}</span></article>)}</div></div>
+                <div className="case-tabs" role="tablist" aria-label="Detalhes do case">{Object.entries(consoleTabs).map(([key, tab]) => <button role="tab" id={`case-tab-${key}`} aria-controls="case-panel" tabIndex={activeConsoleTab === key ? 0 : -1} onKeyDown={(event) => {
+                  const keys = Object.keys(consoleTabs)
+                  const index = keys.indexOf(key)
+                  const next = event.key === 'ArrowRight' ? (index + 1) % keys.length : event.key === 'ArrowLeft' ? (index - 1 + keys.length) % keys.length : event.key === 'Home' ? 0 : event.key === 'End' ? keys.length - 1 : -1
+                  if (next < 0) return
+                  event.preventDefault()
+                  setActiveConsoleTab(keys[next])
+                  document.getElementById(`case-tab-${keys[next]}`)?.focus()
+                }} aria-selected={activeConsoleTab === key} className={activeConsoleTab === key ? 'active' : ''} key={key} onClick={() => setActiveConsoleTab(key)}>{tab.label}</button>)}</div>
+                <div className="case-content" id="case-panel" role="tabpanel" aria-labelledby={`case-tab-${activeConsoleTab}`} tabIndex={0}><div><small>{consoleContent.label.toUpperCase()}</small><h4>{consoleContent.title}</h4><p>{consoleContent.text}</p></div><div className="case-stats">{consoleContent.stats.map(([value, label]) => <article key={label}><strong>{value}</strong><span>{label}</span></article>)}</div></div>
               </div>
             </article>
 
-            <div className="project-toolbar" data-reveal><p>Outros trabalhos</p><div role="group" aria-label="Filtrar projetos">{[['all', 'Todos'], ['client', 'Sites entregues'], ['backend', 'Back-end'], ['opensource', 'Open source'], ['frontend', 'Front-end']].map(([key, label]) => <button className={activeFilter === key ? 'active' : ''} onClick={() => setActiveFilter(key)} key={key}>{label}</button>)}</div></div>
-            <div className="project-grid">{visibleProjects.map((project) => <ProjectCard project={project} key={project.title} />)}</div>
+            <div className="project-toolbar" data-reveal><p>Outros trabalhos</p><div role="group" aria-label="Filtrar projetos">{[['all', 'Todos'], ['client', 'Sites entregues'], ['backend', 'Back-end'], ['opensource', 'Open source'], ['frontend', 'Front-end']].map(([key, label]) => <button aria-pressed={activeFilter === key} className={activeFilter === key ? 'active' : ''} onClick={() => setActiveFilter(key)} key={key}>{label}</button>)}</div></div>
+            <p className="sr-only" role="status">{visibleProjects.length} projetos nesta seleção.</p><div className="project-grid">{visibleProjects.map((project) => <ProjectCard project={project} key={project.title} />)}</div>
             <a className="all-projects-link" href="https://github.com/ronaelmoura?tab=repositories" target="_blank" rel="noreferrer" data-reveal><span>Ver repositórios no GitHub</span><Arrow /></a>
           </div>
         </section>
 
-        <section className="current-work-section" id="trabalho-atual">
+        <section className="current-work-section" id="trabalho-atual" tabIndex={-1}>
           <div className="section-shell">
             <div className="current-work-label" data-reveal><span>TRABALHO ATUAL</span><small>RONAS TECH · ATUAL</small></div>
             <div className="current-work-grid">
@@ -358,9 +396,9 @@ function App() {
           <div className="stack-marquee" aria-label="Tecnologias"><div>{['React', 'TypeScript', 'Node.js', 'Express', 'MySQL', 'Docker', 'Vitest', 'REST APIs', 'GitHub Actions', 'Cloudinary', 'React', 'TypeScript', 'Node.js', 'Express', 'MySQL', 'Docker', 'Vitest', 'REST APIs', 'GitHub Actions', 'Cloudinary'].map((item, index) => <span key={`${item}-${index}`}>{item}<i>✦</i></span>)}</div></div>
         </section>
 
-        <section className="about-section" id="sobre">
+        <section className="about-section" id="sobre" tabIndex={-1}>
           <div className="section-shell about-grid">
-            <div className="portrait-column" data-reveal><div className="portrait-frame"><img src={portraitUrl} alt="Ronael Moura, desenvolvedor Full Stack" width="1100" height="1100" /><div className="portrait-stamp"><span>RM</span><p>BUILDING<br />IN PUBLIC</p></div></div><p className="portrait-caption">Ronael Moura · Ceará, Brasil<br />Criador da Ronas Tech</p></div>
+            <div className="portrait-column" data-reveal><div className="portrait-frame"><img src={portraitUrl} alt="Ronael Moura, desenvolvedor Full Stack" width="1100" height="1100" loading="lazy" decoding="async" /><div className="portrait-stamp"><span>RM</span><p>BUILDING<br />IN PUBLIC</p></div></div><p className="portrait-caption">Ronael Moura · Ceará, Brasil<br />Criador da Ronas Tech</p></div>
             <div className="about-copy" data-reveal><p className="eyebrow"><span /> SOBRE MIM</p><h2>Investigar primeiro.<br /><em>Construir com intenção.</em></h2><p className="about-lead">Minha base em suporte de TI me ensinou algo que levo para cada projeto: tecnologia só funciona quando resolve o problema de alguém.</p><p>Hoje conecto essa visão à engenharia de software. Trabalho entre interface, API, banco de dados, automação e deploy, sem perder de vista clareza, manutenção e experiência.</p><p>Na <strong>Ronas Tech</strong>, meu trabalho atual, reúno desenvolvimento, operação e atendimento técnico em uma experiência direta para clientes de todo o Brasil.</p><div className="about-signature"><span>Ronael Moura</span><small>REACT · NODE.JS · TYPESCRIPT</small></div></div>
           </div>
         </section>
@@ -373,9 +411,9 @@ function App() {
           </div>
         </section>
 
-        <section className="contact-section" id="contato">
+        <section className="contact-section" id="contato" tabIndex={-1}>
           <div className="contact-orbit" aria-hidden="true"><i /><i /><i /></div>
-          <div className="contact-inner" data-reveal><p className="eyebrow"><span /> PRÓXIMO DESAFIO</p><h2>Tem um problema<br />que merece <em>boa engenharia?</em></h2><p>Estou disponível para oportunidades em desenvolvimento Full Stack, produtos digitais e colaborações técnicas.</p><div className="contact-actions"><a className="button button-dark" href="mailto:ronaelmoura240@gmail.com">Iniciar conversa <Arrow /></a><button className="copy-button" onClick={copyEmail}>{copied ? 'E-mail copiado ✓' : 'Copiar e-mail'}</button></div></div>
+          <div className="contact-inner" data-reveal><p className="eyebrow"><span /> PRÓXIMO DESAFIO</p><h2>Tem um problema<br />que merece <em>boa engenharia?</em></h2><p>Estou disponível para oportunidades em desenvolvimento Full Stack, produtos digitais e colaborações técnicas.</p><div className="contact-actions"><a className="button button-dark" href="mailto:ronaelmoura240@gmail.com">Iniciar conversa <Arrow /></a><button className="copy-button" onClick={copyEmail}>{copied ? 'E-mail copiado ✓' : 'Copiar e-mail'}</button><span className="sr-only" role="status">{copied ? 'E-mail copiado para a área de transferência.' : ''}</span></div></div>
         </section>
       </main>
 

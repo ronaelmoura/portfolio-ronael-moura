@@ -32,3 +32,18 @@ test('illustrations and demo are not presented as measured business outcomes', (
 test('canonical URL points to personal portfolio', () => {
   assert.match(html, /rel="canonical" href="https:\/\/ronaelmoura.github.io\/portfolio-ronael-moura\/"/)
 })
+
+test('command menu uses a native modal and respects reduced motion', () => {
+  assert.match(source, /<dialog ref=\{dialogRef\}/)
+  assert.match(source, /dialog\.showModal\(\)/)
+  assert.match(source, /onCancel=/)
+  assert.match(source, /prefers-reduced-motion: reduce/)
+})
+
+test('tabs and filters expose selection and keyboard controls', () => {
+  assert.match(source, /aria-controls="case-panel"/)
+  assert.match(source, /role="tabpanel"/)
+  assert.match(source, /ArrowRight/)
+  assert.match(source, /ArrowLeft/)
+  assert.match(source, /aria-pressed=\{activeFilter === key\}/)
+})

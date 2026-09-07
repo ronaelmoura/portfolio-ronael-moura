@@ -55,6 +55,9 @@ a:hover .arrow, button:hover .arrow { transform: translate(3px,-3px); }
 .menu-toggle { display: none; }
 
 .command-backdrop { position: fixed; inset: 0; z-index: 250; display: grid; place-items: start center; padding: min(18vh,160px) 20px 20px; background: rgba(4,5,7,.74); backdrop-filter: blur(13px); animation: fade .18s both; }
+.command-backdrop { width: 100%; height: 100%; max-width: none; max-height: none; margin: 0; border: 0; color: var(--paper); overflow-y: auto; }
+.command-backdrop:not([open]) { display: none; }
+.command-backdrop::backdrop { background: transparent; }
 .command-menu { width: min(100%,570px); overflow: hidden; border: 1px solid rgba(255,255,255,.17); border-radius: 13px; background: #0e1217; box-shadow: 0 40px 120px rgba(0,0,0,.55); animation: commandIn .25s cubic-bezier(.2,.8,.2,1) both; }
 .command-head,.command-foot { display: flex; align-items: center; justify-content: space-between; padding: 16px 18px; color: #737b85; font: 600 .54rem ui-monospace,monospace; letter-spacing: .12em; }
 .command-head { border-bottom: 1px solid var(--line); }
@@ -548,6 +551,17 @@ a:hover .arrow, button:hover .arrow { transform: translate(3px,-3px); }
   .hero-proof div { grid-template-columns: 110px 1fr; }
   .console-log { display: block; }
 }
+
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+:where(a, button, [tabindex]):focus-visible { outline: 3px solid #497de8; outline-offset: 5px; }
+.command-list button:focus-visible { outline-offset: -3px; background: rgba(132,245,208,.1); }
+.site-header { column-gap: 20px; }
+.main-nav { gap: clamp(16px, 1.8vw, 30px); }
+.main-nav a, .button, .header-cta, .text-link, .project-links a, .project-toolbar button, .copy-button, .case-tabs button { font-size: .875rem; }
+.hero-lead, .flagship-copy > p, .project-card-body > p, .expertise-grid p, .journey-list p, .case-content > div:first-child p, .current-work-copy > p:not(.eyebrow), .contact-inner > p:not(.eyebrow) { font-size: 1rem; }
+.command-head, .command-foot, .command-head button { font-size: .875rem; color: #bbc5d3; }
+.project-card > .visual-caption { color: #535d57; }
+[data-reveal]:focus-within { opacity: 1; transform: none; }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
