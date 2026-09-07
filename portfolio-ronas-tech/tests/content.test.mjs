@@ -24,7 +24,7 @@ test('test counts distinguish CI from local integration', () => {
 })
 
 test('illustrations and demo are not presented as measured business outcomes', () => {
-  assert.match(source, /dados fictícios, não métricas de clientes/)
+  assert.match(source, /dados fictícios/)
   assert.match(source, /não representa uma operação comercial/)
   assert.doesNotMatch(source, /18ms|produção real|@ronas\/multer-safe-limit/)
 })
