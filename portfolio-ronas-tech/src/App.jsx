@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import portraitUrl from '../assets/ronael-moura.webp'
+import dashboardPhotoUrl from '../assets/ronas-desk-dashboard-realistic.png'
+import supportWorkspacePhotoUrl from '../assets/support-workspace-realistic.png'
 
 const projects = [
   {
@@ -217,25 +219,11 @@ function ProductConsole() {
   )
 }
 
-function DeskDashboard() {
-  return (
-    <div className="desk-dashboard" aria-hidden="true">
-      <aside><div className="desk-logo">R<span>D</span></div>{['▦', '◎', '◇', '▤', '⚙'].map((item, index) => <i className={index === 0 ? 'active' : ''} key={item}>{item}</i>)}</aside>
-      <div className="desk-content">
-        <div className="desk-toolbar"><div><small>VISÃO GERAL</small><strong>Central de suporte</strong></div><span>Demo ilustrativa</span></div>
-        <div className="desk-metrics"><article><span>Em aberto</span><strong>12</strong><small>agora</small></article><article><span>Em andamento</span><strong>08</strong><small>ativos</small></article><article><span>SLA atendido</span><strong>94%</strong><small>+6.2%</small></article></div>
-        <div className="desk-lower">
-          <div className="desk-chart"><span>Chamados resolvidos</span><div>{[28, 45, 35, 66, 54, 81, 72, 92].map((height, index) => <i key={`${height}-${index}`} style={{ height: `${height}%` }} />)}</div></div>
-          <div className="desk-tickets"><span>Atividade recente</span>{[['Crítico', 'Falha no acesso'], ['Médio', 'Configurar estação'], ['Baixo', 'Atualização concluída']].map(([level, title], index) => <p key={title}><i className={`ticket-${index}`} /><b>{title}</b><small>{level}</small></p>)}</div>
-        </div>
-      </div>
-    </div>
-  )
-}
-
 function SupportConsole() {
   return (
-    <div className="support-console" aria-label="Fluxo de diagnóstico remoto da Ronas Tech">
+    <>
+      <figure className="support-photo"><img src={supportWorkspacePhotoUrl} alt="Mesa de trabalho com laptop e monitor exibindo painéis de suporte técnico" /><figcaption>Imagem editorial · ambiente de desenvolvimento e suporte.</figcaption></figure>
+      <div className="support-console" aria-label="Fluxo de diagnóstico remoto da Ronas Tech">
       <div className="support-console-head"><span>diagnostico.ronastech</span><b><i /> sessão segura</b></div>
       <div className="support-console-body">
         <small>DIAGNÓSTICO REMOTO</small>
@@ -243,7 +231,8 @@ function SupportConsole() {
         <div className="support-checks">{['Sistema Windows', 'Inicialização', 'Armazenamento', 'Segurança básica'].map((item, index) => <p key={item}><span>✓</span>{item}<i style={{ '--check-delay': `${index * 120}ms` }} /></p>)}</div>
         <div className="support-terminal"><span>›</span> acesso iniciado com sua autorização<br /><span>›</span> nenhum valor cobrado antes da avaliação</div>
       </div>
-    </div>
+      </div>
+    </>
   )
 }
 
@@ -350,7 +339,7 @@ function App() {
               <div className="flagship-top"><p><span>01</span> CASE PRINCIPAL · PRODUTO FULL STACK</p><div><i /> ONLINE</div></div>
               <div className="flagship-grid">
                 <div className="flagship-copy"><span className="version-pill">RONAS DESK · v1.0.0</span><h3>Uma operação de suporte.<br /><em>Projetada como produto.</em></h3><p>Projeto autoral de portfólio que simula uma equipe de suporte. Desenvolvi interface, API, persistência e testes. A demonstração usa dados fictícios e acesso somente leitura; não representa uma operação comercial.</p><div className="flagship-actions"><a className="button button-primary" href="https://ronas-desk.onrender.com" target="_blank" rel="noreferrer">Testar conta demo <Arrow /></a><a className="text-link" href="https://github.com/ronaelmoura/ronas-desk" target="_blank" rel="noreferrer">Inspecionar código <Arrow /></a></div></div>
-                <div className="flagship-visual"><p className="visual-caption">Interface ilustrativa · dados fictícios, não métricas de clientes.</p><div className="app-chrome"><div><i /><i /><i /></div><span>ronas-desk.onrender.com/dashboard</span><small>ILUSTRAÇÃO</small></div><DeskDashboard /></div>
+                <figure className="flagship-visual realistic-figure"><img className="realistic-product-image" src={dashboardPhotoUrl} alt="Mockup fotográfico de um dashboard escuro de atendimento técnico" /><figcaption>Mockup visual · a interface e os dados reais estão disponíveis na demo.</figcaption></figure>
               </div>
               <div className="case-console">
                 <div className="case-tabs" role="tablist" aria-label="Detalhes do case">{Object.entries(consoleTabs).map(([key, tab]) => <button role="tab" id={`case-tab-${key}`} aria-controls="case-panel" tabIndex={activeConsoleTab === key ? 0 : -1} onKeyDown={(event) => {
