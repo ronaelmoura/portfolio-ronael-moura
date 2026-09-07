@@ -1,12 +1,12 @@
-# Ronael Moura — Full Stack Engineer
+# Ronael Moura — Desenvolvedor Full Stack
 
-Portfólio profissional reconstruído para apresentar produtos reais, decisões de engenharia e qualidade técnica. A experiência tem como case principal o **Ronas Desk v1.0.0**, uma aplicação Full Stack publicada e coberta por 370 testes automatizados.
+Portfólio profissional reconstruído para apresentar projetos autorais, decisões de engenharia e qualidade técnica. A experiência tem como case principal o **Ronas Desk v1.0.0**, uma aplicação Full Stack publicada e de demonstração com 370 testes documentados (361 no CI e 9 de integração local).
 
-Também apresenta a [Ronas Tech](https://www.ronastech.com.br/), operação atual de suporte remoto conduzida por Ronael, e entregas publicadas para clientes.
+Também apresenta a [Ronas Tech](https://www.ronastech.com.br/), operação atual de suporte remoto conduzida por Ronael, e trabalhos publicados para terceiros.
 
 ## Experiência
 
-- Hero técnico com métricas verificáveis e painel animado
+- Apresentação pessoal, currículo e links para evidências; ilustrações identificadas
 - Case interativo do Ronas Desk: produto, arquitetura e qualidade
 - Projetos selecionados a partir do GitHub real
 - Filtros por especialidade
@@ -43,6 +43,6 @@ O Vite usa o caminho-base `/portfolio-ronael-moura/`, compatível com a publica�
 
 ## Autor
 
-**Ronael Moura** — Full Stack Engineer e criador da Ronas Tech
+**Ronael Moura** — Desenvolvedor Full Stack e criador da Ronas Tech
 
 [GitHub](https://github.com/ronaelmoura) · [LinkedIn](https://www.linkedin.com/in/ronael-moura) · [YouTube](https://www.youtube.com/@RonasTech)

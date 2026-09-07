@@ -1,8 +1,8 @@
 # Portfólio de Ronael Moura
 
-Portfólio profissional de **Ronael Moura**, Full Stack Engineer e criador da Ronas Tech.
+Portfólio profissional de **Ronael Moura**, Desenvolvedor Full Stack com React, Node.js e TypeScript, e criador da Ronas Tech.
 
-O projeto apresenta produtos reais, decisões de arquitetura e qualidade de engenharia. Inclui a [Ronas Tech](https://www.ronastech.com.br/), trabalho atual de Ronael; o [Ronas Desk](https://github.com/ronaelmoura/ronas-desk), aplicação Full Stack v1.0 validada por 370 testes; e o [portfólio de Beatriz Mendes](https://beatriz-mendes-portfolio.vercel.app/), uma entrega profissional publicada.
+O projeto apresenta projetos autorais, decisões técnicas e trabalhos publicados. O case principal é o [Ronas Desk](https://github.com/ronaelmoura/ronas-desk), uma demonstração Full Stack com dados fictícios e 370 testes documentados (361 no CI e 9 de integração local). Também inclui StockFlow API, Multer Safe Limit, o [portfólio de Beatriz Mendes](https://beatriz-mendes-portfolio.vercel.app/) e a [Ronas Tech](https://www.ronastech.com.br/) como experiência profissional atual em suporte remoto. Painéis ilustrativos são identificados e não representam métricas de clientes.
 
 ## Projeto
 
