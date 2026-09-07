@@ -39,7 +39,7 @@ npm run lint
 npm run build
 ```
 
-O Vite usa o caminho-base `/portfolio-ronas-tech/`, compatível com a publicação por GitHub Pages configurada no repositório.
+O Vite usa o caminho-base `/portfolio-ronael-moura/`, compatível com a publicação em https://ronaelmoura.github.io/portfolio-ronael-moura/.
 
 ## Autor
 
