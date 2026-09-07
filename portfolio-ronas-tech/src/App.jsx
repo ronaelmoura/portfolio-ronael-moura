@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import portraitUrl from '../assets/ronael-moura.webp'
-import demoDashboardUrl from '../assets/ronas-desk-demo-dashboard.png'
+import demoDashboardUrl from '../assets/ronas-desk-demo-dashboard-clean.png'
 import supportWorkspacePhotoUrl from '../assets/support-workspace-realistic.png'
 
 const projects = [
