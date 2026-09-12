@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import portraitUrl from '../assets/ronael-moura.webp'
-import demoDashboardUrl from '../assets/ronas-desk-demo-dashboard-clean.png'
-import supportWorkspacePhotoUrl from '../assets/support-workspace-realistic.png'
+import demoDashboardUrl from '../assets/ronas-desk-demo-dashboard-clean.webp'
+import supportWorkspacePhotoUrl from '../assets/support-workspace-realistic.webp'
 
 const projects = [
   {
