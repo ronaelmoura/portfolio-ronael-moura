@@ -41,7 +41,7 @@ jobs:
       - name: Validate portfolio content
         run: |
           npm run lint
-          node --test tests/content.test.mjs
+          npm test
 
       - name: Build application
         run: npm run build

@@ -19,8 +19,16 @@ npm run dev
 ```bash
 cd portfolio-ronas-tech
 npm run lint
+npm test
 npm run build
 ```
+
+São sete testes de conteúdo, executados com o test runner nativo do Node.
+Eles verificam o que não pode regredir na página: que as ilustrações não são
+apresentadas como resultado medido de cliente, que a URL canônica aponta para
+o portfólio, que o menu de comandos usa um diálogo nativo e respeita
+`prefers-reduced-motion`, e que abas e filtros expõem seleção e controle por
+teclado. O CI roda exatamente os mesmos comandos.
 
 O workflow em `.github/workflows/deploy.yml` publica o build no GitHub Pages após pushes para `main`.
 
