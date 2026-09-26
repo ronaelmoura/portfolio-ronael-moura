@@ -1,29 +1,53 @@
 # Ronael Moura — Desenvolvedor Full Stack
 
-Portfólio profissional reconstruído para apresentar projetos autorais, decisões de engenharia e qualidade técnica. A experiência tem como case principal o **Ronas Desk v1.0.0**, uma aplicação Full Stack publicada e de demonstração com 370 testes documentados (361 no CI e 9 de integração local).
+Portfólio profissional focado em **sistemas web, APIs e soluções digitais para problemas reais**.
 
-Também apresenta a [Ronas Tech](https://www.ronastech.com.br/), operação atual de suporte remoto conduzida por Ronael, e trabalhos publicados para terceiros.
+O case principal é o **Ronas Desk v1.0.0**, uma aplicação Full Stack publicada para demonstração. O portfólio também apresenta o StockFlow API e o Multer Safe Limit como evidências de engenharia de backend, consistência, testes e investigação técnica.
 
-## Experiência
+## O que o portfólio apresenta
 
-- Apresentação pessoal, currículo e links para evidências; ilustrações identificadas
-- Case interativo do Ronas Desk: produto, arquitetura e qualidade
-- Projetos selecionados a partir do GitHub real
-- Filtros por especialidade
-- Atalhos de navegação com `Ctrl/⌘ + K`
-- Progresso de leitura, spotlight de cursor e animações por interseção
-- Layout responsivo com tratamento específico para celular
-- Preferência `prefers-reduced-motion` respeitada
-- SEO, Open Graph, Twitter Card e dados estruturados
+- Posicionamento profissional como Desenvolvedor Full Stack
+- Case principal do Ronas Desk com demo pública
+- Evidências de arquitetura, qualidade e decisões técnicas
+- StockFlow API como case de backend
+- Multer Safe Limit como case de investigação e correção de edge case
+- Projetos publicados para terceiros e trabalhos de frontend
+- Experiência atual com a Ronas Tech
+- Currículo, GitHub, LinkedIn e contato direto
 
-## Projetos destacados
+## Projetos em destaque
 
-- [Ronas Tech](https://www.ronastech.com.br/) — trabalho atual, operação digital de suporte remoto para Windows
-- [Beatriz Mendes · Dados](https://beatriz-mendes-portfolio.vercel.app/) — portfólio profissional criado e publicado para uma analista de dados aplicada à saúde
-- [Ronas Desk](https://github.com/ronaelmoura/ronas-desk) — React 19, Express 5, MySQL, JWT, Cloudinary, Docker e CI
-- [StockFlow API](https://github.com/ronaelmoura/stockflow-api) — TypeScript, Express, MySQL, OpenAPI e autenticação
-- [Multer Safe Limit](https://github.com/ronaelmoura/multer-safe-limit) — pacote TypeScript para um edge case real de upload
+### Ronas Desk
+Aplicação Full Stack de gerenciamento de chamados com React, Node.js, Express e MySQL.
+
+**370 testes automatizados documentados:**
+- 307 testes unitários de backend no CI
+- 54 testes de frontend no CI
+- 9 testes de integração com MySQL executados localmente
+
+[Demo](https://ronas-desk.onrender.com) · [Código](https://github.com/ronaelmoura/ronas-desk)
+
+### StockFlow API
+API de estoque e pedidos focada em problemas de backend: transações, concorrência, idempotência, RBAC, ledger, Outbox e OpenAPI.
+
+[Código](https://github.com/ronaelmoura/stockflow-api)
+
+### Multer Safe Limit
+Biblioteca TypeScript criada a partir da investigação de um comportamento de fronteira em uploads no limite exato de fileSize.
+
+[Código](https://github.com/ronaelmoura/multer-safe-limit)
+
+### Outros trabalhos
+- [Beatriz Mendes · Dados](https://beatriz-mendes-portfolio.vercel.app/) — portfólio profissional publicado
 - [Nexo Financeiro](https://ronaelmoura.github.io/nexo-dashboard-financeiro/) — dashboard React + TypeScript
+
+## Experiência atual
+
+A [Ronas Tech](https://www.ronastech.com.br/) é minha operação atual de suporte remoto. A experiência em diagnóstico, investigação de problemas e atendimento ao usuário influencia a forma como penso produtos e sistemas.
+
+## Tecnologias
+
+React · TypeScript · JavaScript · Node.js · Express · MySQL · REST APIs · Docker · Vitest · GitHub Actions
 
 ## Rodar localmente
 
@@ -36,13 +60,14 @@ npm run dev
 
 ```bash
 npm run lint
+npm test
 npm run build
 ```
 
-O Vite usa o caminho-base `/portfolio-ronael-moura/`, compatível com a publicação em https://ronaelmoura.github.io/portfolio-ronael-moura/.
+O Vite usa o caminho-base `/portfolio-ronael-moura/`, compatível com a publicação em GitHub Pages.
 
 ## Autor
 
-**Ronael Moura** — Desenvolvedor Full Stack e criador da Ronas Tech
+**Ronael Moura — Desenvolvedor Full Stack**
 
 [GitHub](https://github.com/ronaelmoura) · [LinkedIn](https://www.linkedin.com/in/ronael-moura) · [YouTube](https://www.youtube.com/@RonasTech)
